@@ -4,7 +4,7 @@
 \alias{model_mbic}
 \title{model_mbic}
 \usage{
-model_mbic(data, outcome, minpv)
+model_mbic(data, outcome)
 }
 \description{
 Function to model mbic selection process on a given dataframe

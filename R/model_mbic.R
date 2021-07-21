@@ -11,7 +11,7 @@
 #' @importFrom tibble rownames_to_column
 #'
 
-model_mbic <- function(data, outcome, minpv){
+model_mbic <- function(data, outcome){
 
   data <- data %>%
     as.data.frame()
@@ -26,7 +26,7 @@ model_mbic <- function(data, outcome, minpv){
   bigstep_prepped <- bigstep::prepare_data(y_temp, x_temp, verbose = FALSE)
 
   bigstep_prepped %>%
-    reduce_matrix(minpv = minpv) %>%
+    reduce_matrix(minpv = 0.05) %>%
     fast_forward(crit=mbic) %>%
     multi_backward(crit=mbic) %>%
     summary() %>%
