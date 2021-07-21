@@ -8,6 +8,7 @@
 #'
 #' @import bigstep
 #' @import dplyr
+#' @importFrom tibble rownames_to_column
 #'
 
 model_mbic <- function(data, outcome, minpv){
