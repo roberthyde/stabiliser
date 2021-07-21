@@ -15,6 +15,8 @@
 #' @import dplyr
 #' @import purrr
 #'
+#' @export
+#'
 
 stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, model, ...){
   perm_thresh <- permute(data=data, outcome=outcome, permutations=permutations, perm_boot_reps=perm_boot_reps, model=model)
