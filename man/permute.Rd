@@ -4,7 +4,7 @@
 \alias{permute}
 \title{Permute}
 \usage{
-permute(data, outcome, permutations, perm_boot_reps, model, ...)
+permute(data, outcome, permutations, perm_boot_reps, model)
 }
 \description{
 Calculates permutation threshold for null model, where a specified model is run over multiple bootstrap resamples of multiple permuted version of the dataset.

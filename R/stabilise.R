@@ -18,9 +18,9 @@
 #' @export
 #'
 
-stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, model, ...){
+stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, model){
   perm_thresh <- permute(data=data, outcome=outcome, permutations=permutations, perm_boot_reps=perm_boot_reps, model=model)
-  stability <- boot_model(data=data, outcome=outcome, boot_reps=boot_reps, model=model, ...)
+  stability <- boot_model(data=data, outcome=outcome, boot_reps=boot_reps, model=model)
 
   list("stability" = stability,
        "perm_thresh" = perm_thresh)

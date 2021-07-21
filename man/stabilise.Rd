@@ -4,7 +4,7 @@
 \alias{stabilise}
 \title{stabilise}
 \usage{
-stabilise(data, outcome, boot_reps, permutations, perm_boot_reps, model, ...)
+stabilise(data, outcome, boot_reps, permutations, perm_boot_reps, model)
 }
 \description{
 Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats

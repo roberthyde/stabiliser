@@ -4,7 +4,7 @@
 \alias{boot_model}
 \title{boot_model}
 \usage{
-boot_model(data, outcome, boot_reps, model, ...)
+boot_model(data, outcome, boot_reps, model)
 }
 \description{
 Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats
