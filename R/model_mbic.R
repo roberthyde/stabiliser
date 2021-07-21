@@ -22,16 +22,16 @@ model_mbic <- function(data, outcome, minpv){
   x_temp <- data %>%
     select(-all_of(outcome))
 
-  mBIC_gwas <- bigstep::prepare_data(y_temp, x_temp, verbose = FALSE)
+  bigstep_prepped <- bigstep::prepare_data(y_temp, x_temp, verbose = FALSE)
 
-  coef_mbic <- mBIC_gwas %>%
+  bigstep_prepped %>%
     reduce_matrix(minpv = minpv) %>%
     fast_forward(crit=mbic) %>%
     multi_backward(crit=mbic) %>%
     summary() %>%
     coef() %>%
     as.data.frame() %>%
-    rownames_to_column(., var = "variable")
-
-  coef_mbic
+    rownames_to_column(., var = "variable") %>%
+    filter(!grepl("(Intercept)", variable),
+           !grepl("`Xm[, -1]`", variable))
 }
