@@ -18,5 +18,6 @@ permute <- function(data, outcome, permutations, perm_boot_reps, model, ...){
     mutate(stab_df = map(.x = .$splits, .f = ~as.data.frame(.) %>% boot_model(., outcome=outcome, boot_reps = perm_boot_reps, model=model, minpv=minpv)),
            perm_thresh = map(stab_df, ~as_vector(.x$stability) %>% ecdf() %>% quantile(., probs=1))) %>%
     unnest(perm_thresh) %>%
-    summarise(mean_perm_thresh = mean(perm_thresh))
+    summarise(mean_thresh = mean(perm_thresh)) %>%
+    pull(mean_thresh)
 }
