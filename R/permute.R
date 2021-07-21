@@ -11,6 +11,7 @@
 #'
 #' @import dplyr
 #' @import purrr
+#' @importFrom tidyr unnest
 #' @importFrom rsample permutations
 #'
 
