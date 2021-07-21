@@ -4,8 +4,8 @@
 \alias{permute}
 \title{Permute}
 \usage{
-permute(data, permute, times, repeats)
+permute(data, outcome, permutations, perm_boot_reps, model, ...)
 }
 \description{
-Permutes a specified outcome a given number of times, and repeats this several times.
+Calculates permutation threshold for null model, where a specified model is run over multiple bootstrap resamples of multiple permuted version of the dataset.
 }
