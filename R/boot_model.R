@@ -14,13 +14,12 @@
 #'
 
 boot_model <- function(data, outcome, boot_reps, model, ...){
-  bootstraps(data, boot_reps) %>%
+  rsample::bootstraps(data, boot_reps) %>%
     map_df(.x = .$splits, .f = ~model(., outcome=outcome, minpv=minpv)) %>%
     group_by(variable) %>%
-    summarise(stability = (n()/boot_reps)*100) %>%
-    filter(!grepl("(Intercept)", variable),
-           !grepl("`Xm[, -1]`", variable)) %>%
+    summarise(stability = (n()/boot_reps)*100)  %>%
     right_join(tibble(variable = colnames(data))) %>%
     replace_na(list(stability=0)) %>%
     arrange(desc(stability))
 }
+
