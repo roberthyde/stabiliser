@@ -5,8 +5,9 @@
 #' @data a dataframe containing an outcome variable to be permuted
 #' @outcome the outcome to be permuted as a string (i.e. "y")
 #' @permutations the number of times to be permuted per repeat
-#' @repeats the number of times to repeat each set of permutations
+#' @perm_boot_reps the number of times to repeat each set of permutations
 #' @model the model to be used (i.e. model_mbic)
+#' @... tuning parameters to be passed to model (i.e. minpv for model_mbic)
 #'
 #' @import dplyr
 #' @import purrr
