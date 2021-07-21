@@ -11,6 +11,7 @@
 #' @import rsample
 #' @import dplyr
 #' @import purrr
+#' @importFrom tidyr replace_na
 #'
 
 boot_model <- function(data, outcome, boot_reps, model, ...){
@@ -22,4 +23,3 @@ boot_model <- function(data, outcome, boot_reps, model, ...){
     replace_na(list(stability=0)) %>%
     arrange(desc(stability))
 }
-
