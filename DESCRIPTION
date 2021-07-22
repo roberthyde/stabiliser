@@ -1,13 +1,18 @@
 Package: stabiliser
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: stabiliser: Robust variable selection using stability selection
+Version: 0.0.0.90
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(
+    person(given = "Robert",
+           family = "Hyde",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "robert.hyde1@nottingham.ac.uk",
+           comment = c(ORCID = "https://orcid.org/0000-0002-8705-9405")),
+    person(given = "Martin",
+           family = "Green",
+           role = c("aut", "cre"),
+           email = "martin.green@nottingham.ac.uk"))       
+Description: Variable selection through stabilty selection and the use of an objective threshold based on a model from permuted data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -27,5 +32,6 @@ Imports:
     tibble,
     purrr,
     tidyr,
-    stringr
+    stringr,
+    ggplot2
 VignetteBuilder: knitr
