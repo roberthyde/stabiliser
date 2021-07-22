@@ -34,9 +34,11 @@ model_mbic <- function(data, outcome) {
     stats::coef() %>%
     as.data.frame() %>%
     rownames_to_column(., var = "variable") %>%
+    mutate(variable = str_remove_all(variable, "`")) %>%
     filter(
       !grepl("(Intercept)", variable),
-      !grepl("`Xm[, -1]`", variable)
-    )
+      !grepl("Xm[, -1]", variable)
+    ) %>%
+    rename(estimate = Estimate)
 }
 
