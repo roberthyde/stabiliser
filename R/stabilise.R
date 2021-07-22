@@ -19,7 +19,8 @@
 
 stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps) {
   perm_thresh <- permute(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps)
-  stability <- boot_model(data = data, outcome = outcome, boot_reps = boot_reps)
+  stability <- boot_model(data = data, outcome = outcome, boot_reps = boot_reps) %>%
+    mutate(significant = case_when(stability >= perm_thresh ~ "*"))
 
   list(
     "stability" = stability,
