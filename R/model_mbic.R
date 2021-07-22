@@ -11,12 +11,11 @@
 #' @importFrom tibble rownames_to_column
 #'
 
-model_mbic <- function(data, outcome){
-
+model_mbic <- function(data, outcome) {
   data <- data %>%
     as.data.frame()
 
-  y_temp <-data %>%
+  y_temp <- data %>%
     select(all_of(outcome)) %>%
     as.matrix()
 
@@ -27,12 +26,14 @@ model_mbic <- function(data, outcome){
 
   bigstep_prepped %>%
     reduce_matrix(minpv = 0.05) %>%
-    fast_forward(crit=mbic) %>%
-    multi_backward(crit=mbic) %>%
+    fast_forward(crit = mbic) %>%
+    multi_backward(crit = mbic) %>%
     summary() %>%
     coef() %>%
     as.data.frame() %>%
     rownames_to_column(., var = "variable") %>%
-    filter(!grepl("(Intercept)", variable),
-           !grepl("`Xm[, -1]`", variable))
+    filter(
+      !grepl("(Intercept)", variable),
+      !grepl("`Xm[, -1]`", variable)
+    )
 }
