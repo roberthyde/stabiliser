@@ -10,8 +10,11 @@
 #' @import rsample
 #' @import dplyr
 #' @import purrr
+#' @importFrom utils globalVariables
 #' @importFrom tidyr replace_na
 #'
+#'
+utils::globalVariables(c(".", "variable", "stability"))
 
 boot_model <- function(data, outcome, boot_reps, model) {
   rsample::bootstraps(data, boot_reps) %>%

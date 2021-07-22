@@ -10,9 +10,11 @@
 #'
 #' @import dplyr
 #' @import purrr
+#' @importFrom utils globalVariables
 #' @importFrom tidyr unnest
 #' @importFrom rsample permutations
 #'
+utils::globalVariables(c(".", "stab_df", "perm_thresh", "mean_thresh"))
 
 permute <- function(data, outcome, permutations, perm_boot_reps, model) {
   rsample::permutations(data = data, permute = outcome, times = permutations) %>%

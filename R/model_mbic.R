@@ -9,6 +9,9 @@
 #' @import dplyr
 #' @importFrom tibble rownames_to_column
 #' @importFrom stats coef
+#' @importFrom utils globalVariables
+#'
+utils::globalVariables(c(".", "variable"))
 
 model_mbic <- function(data, outcome) {
   data <- data %>%
@@ -30,10 +33,10 @@ model_mbic <- function(data, outcome) {
     summary() %>%
     stats::coef() %>%
     as.data.frame() %>%
-    rownames_to_column(.data, var = "variable") %>%
+    rownames_to_column(., var = "variable") %>%
     filter(
-      !grepl("(Intercept)", .data$variable),
-      !grepl("`Xm[, -1]`", .data$variable)
+      !grepl("(Intercept)", variable),
+      !grepl("`Xm[, -1]`", variable)
     )
 }
 
