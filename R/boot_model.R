@@ -18,7 +18,7 @@ utils::globalVariables(c(".", "variable", "stability"))
 
 boot_model <- function(data, outcome, boot_reps, model) {
   rsample::bootstraps(data, boot_reps) %>%
-    map_df(.x = .$splits, .f = ~ model(.data, outcome = outcome)) %>%
+    map_df(.x = .$splits, .f = ~ model(., outcome = outcome)) %>%
     group_by(variable) %>%
     summarise(stability = (n() / boot_reps) * 100) %>%
     right_join(tibble(variable = colnames(data))) %>%

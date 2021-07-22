@@ -10,19 +10,18 @@
 #'
 #' @import dplyr
 #' @import purrr
-#' @importFrom utils globalVariables
 #' @importFrom tidyr unnest
 #' @importFrom rsample permutations
 #'
-utils::globalVariables(c(".", "stab_df", "perm_thresh", "mean_thresh"))
+#utils::globalVariables(c(".", "stab_df", "perm_thresh", "mean_thresh"))
 
 permute <- function(data, outcome, permutations, perm_boot_reps, model) {
   rsample::permutations(data = data, permute = outcome, times = permutations) %>%
     mutate(
       stab_df = map(.x = .$splits, .f = ~ as.data.frame(.) %>% boot_model(., outcome = outcome, boot_reps = perm_boot_reps, model = model)),
       perm_thresh = map(stab_df, ~ as_vector(.x$stability) %>%
-        ecdf() %>%
-        quantile(., probs = 1))
+                          ecdf() %>%
+                          quantile(., probs = 1))
     ) %>%
     unnest(perm_thresh) %>%
     summarise(mean_thresh = mean(perm_thresh)) %>%
