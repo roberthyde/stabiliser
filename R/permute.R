@@ -1,4 +1,4 @@
-#' Permute
+#' permute
 #'
 #' Calculates permutation threshold for null model, where a specified model is run over multiple bootstrap resamples of multiple permuted version of the dataset.
 #'

@@ -14,7 +14,8 @@
 #' @importFrom tidyr replace_na
 #' @importFrom stats quantile
 #'
-utils::globalVariables(c(".", "variable", "stability", "estimate", "quantile", "prop_one_side"))
+
+utils::globalVariables(c(".", "variable", "stability", "estimate", "quantile", "prop_one_side", "bootstrap_p"))
 
 boot_model <- function(data, outcome, boot_reps) {
   rsample::bootstraps(data, boot_reps) %>%
@@ -29,6 +30,7 @@ boot_model <- function(data, outcome, boot_reps) {
               stability = (n() / boot_reps) * 100) %>%
     select(-prop_one_side) %>%
     right_join(tibble(variable = colnames(data)), by="variable") %>%
-    replace_na(list(stability = 0)) %>%
+    replace_na(list(stability = 0,
+                    bootstrap_p = 1)) %>%
     arrange(desc(stability))
 }
