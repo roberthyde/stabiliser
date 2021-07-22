@@ -16,8 +16,6 @@ permute(data, outcome, permutations, perm_boot_reps, model)
 \item{perm_boot_reps}{the number of times to repeat each set of permutations}
 
 \item{model}{the model to be used (i.e. model_mbic)}
-
-\item{...}{tuning parameters to be passed to model (i.e. minpv for model_mbic)}
 }
 \description{
 Calculates permutation threshold for null model, where a specified model is run over multiple bootstrap resamples of multiple permuted version of the dataset.

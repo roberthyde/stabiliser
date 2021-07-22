@@ -7,7 +7,6 @@
 #' @param permutations the number of times to be permuted per repeat
 #' @param perm_boot_reps the number of times to repeat each set of permutations
 #' @param model the model to be used (i.e. model_mbic)
-#' @param ... tuning parameters to be passed to model (i.e. minpv for model_mbic)
 #'
 #' @import dplyr
 #' @import purrr
