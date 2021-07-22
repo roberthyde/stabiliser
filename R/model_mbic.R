@@ -10,6 +10,7 @@
 #' @importFrom tibble rownames_to_column
 #' @importFrom stats coef
 #' @importFrom utils globalVariables
+#' @importFrom stringr str_remove_all
 #'
 utils::globalVariables(c(".", "variable"))
 
