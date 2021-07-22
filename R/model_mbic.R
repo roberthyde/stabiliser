@@ -12,7 +12,7 @@
 #' @importFrom utils globalVariables
 #' @importFrom stringr str_remove_all
 #'
-utils::globalVariables(c(".", "variable"))
+utils::globalVariables(c(".", "variable", "Estimate"))
 
 model_mbic <- function(data, outcome) {
   data <- data %>%
@@ -28,7 +28,7 @@ model_mbic <- function(data, outcome) {
   bigstep_prepped <- bigstep::prepare_data(y_temp, x_temp, verbose = FALSE)
 
   bigstep_prepped %>%
-    reduce_matrix(minpv = 0.05) %>%
+    reduce_matrix(minpv = 0.01) %>%
     fast_forward(crit = mbic) %>%
     multi_backward(crit = mbic) %>%
     summary() %>%

@@ -16,8 +16,6 @@ stabilise(data, outcome, boot_reps, permutations, perm_boot_reps)
 \item{permutations}{the number of times to be permuted per repeat}
 
 \item{perm_boot_reps}{the number of times to repeat each set of permutations}
-
-\item{model}{the model to be used (i.e. model_mbic)}
 }
 \description{
 Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats

@@ -26,5 +26,6 @@ Imports:
     rsample,
     tibble,
     purrr,
-    tidyr
+    tidyr,
+    stringr
 VignetteBuilder: knitr

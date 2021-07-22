@@ -6,14 +6,14 @@
 #' @param outcome the outcome to be permuted as a string (i.e. "y")
 #' @param permutations the number of times to be permuted per repeat
 #' @param perm_boot_reps the number of times to repeat each set of permutations
-#' @param model the model to be used (i.e. model_mbic)
 #'
 #' @import dplyr
 #' @import purrr
 #' @importFrom tidyr unnest
 #' @importFrom rsample permutations
+#' @importFrom utils globalVariables
 #'
-#utils::globalVariables(c(".", "stab_df", "perm_thresh", "mean_thresh"))
+utils::globalVariables(c("stab_df", "perm_thresh", "mean_thresh"))
 
 permute <- function(data, outcome, permutations, perm_boot_reps) {
   rsample::permutations(data = data, permute = outcome, times = permutations) %>%
