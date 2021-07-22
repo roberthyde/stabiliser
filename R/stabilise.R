@@ -2,14 +2,14 @@
 #'
 #' Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats
 #'
-#' @data a dataframe containing an outcome variable to be permuted
-#' @outcome the outcome as a string (i.e. "y")
-#' @boot_reps the number of bootstrap samples
-#' @model the model to be used (i.e. model_mbic)
-#' @permutations the number of times to be permuted per repeat
-#' @perm_boot_reps the number of times to repeat each set of permutations
-#' @model the model to be used (i.e. model_mbic)
-#' @... tuning parameters to be passed to model (i.e. minpv for model_mbic)
+#' @param data a dataframe containing an outcome variable to be permuted
+#' @param outcome the outcome as a string (i.e. "y")
+#' @param boot_reps the number of bootstrap samples
+#' @param model the model to be used (i.e. model_mbic)
+#' @param permutations the number of times to be permuted per repeat
+#' @param perm_boot_reps the number of times to repeat each set of permutations
+#' @param model the model to be used (i.e. model_mbic)
+#' @param ... tuning parameters to be passed to model (i.e. minpv for model_mbic)
 #'
 #' @import rsample
 #' @import dplyr

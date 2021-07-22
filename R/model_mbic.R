@@ -2,9 +2,9 @@
 #'
 #' Function to model mbic selection process on a given dataframe
 #'
-#' @data a dataframe containing an outcome variable to be permuted (usually coming from nested bootstrap data)
-#' @outcome the outcome as a string (i.e. "y")
-#' @minpv the minpv value for initial filtering
+#' @param data a dataframe containing an outcome variable to be permuted (usually coming from nested bootstrap data)
+#' @param outcome the outcome as a string (i.e. "y")
+#' @param minpv the minpv value for initial filtering
 #'
 #' @import bigstep
 #' @import dplyr

@@ -6,6 +6,13 @@
 \usage{
 model_mbic(data, outcome)
 }
+\arguments{
+\item{data}{a dataframe containing an outcome variable to be permuted (usually coming from nested bootstrap data)}
+
+\item{outcome}{the outcome as a string (i.e. "y")}
+
+\item{minpv}{the minpv value for initial filtering}
+}
 \description{
 Function to model mbic selection process on a given dataframe
 }

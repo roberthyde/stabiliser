@@ -2,12 +2,12 @@
 #'
 #' Calculates permutation threshold for null model, where a specified model is run over multiple bootstrap resamples of multiple permuted version of the dataset.
 #'
-#' @data a dataframe containing an outcome variable to be permuted
-#' @outcome the outcome to be permuted as a string (i.e. "y")
-#' @permutations the number of times to be permuted per repeat
-#' @perm_boot_reps the number of times to repeat each set of permutations
-#' @model the model to be used (i.e. model_mbic)
-#' @... tuning parameters to be passed to model (i.e. minpv for model_mbic)
+#' @param data a dataframe containing an outcome variable to be permuted
+#' @param outcome the outcome to be permuted as a string (i.e. "y")
+#' @param permutations the number of times to be permuted per repeat
+#' @param perm_boot_reps the number of times to repeat each set of permutations
+#' @param model the model to be used (i.e. model_mbic)
+#' @param ... tuning parameters to be passed to model (i.e. minpv for model_mbic)
 #'
 #' @import dplyr
 #' @import purrr

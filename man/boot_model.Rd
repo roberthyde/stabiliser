@@ -6,6 +6,17 @@
 \usage{
 boot_model(data, outcome, boot_reps, model)
 }
+\arguments{
+\item{data}{a dataframe containing an outcome variable to be permuted}
+
+\item{outcome}{the outcome as a string (i.e. "y")}
+
+\item{boot_reps}{the number of bootstrap samples}
+
+\item{model}{the model to be used (i.e. model_mbic)}
+
+\item{...}{further model specific paramaters (i.e. minpv=0.01 for model_mbic)}
+}
 \description{
 Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats
 }

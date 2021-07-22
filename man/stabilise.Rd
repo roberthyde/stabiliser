@@ -6,6 +6,21 @@
 \usage{
 stabilise(data, outcome, boot_reps, permutations, perm_boot_reps, model)
 }
+\arguments{
+\item{data}{a dataframe containing an outcome variable to be permuted}
+
+\item{outcome}{the outcome as a string (i.e. "y")}
+
+\item{boot_reps}{the number of bootstrap samples}
+
+\item{permutations}{the number of times to be permuted per repeat}
+
+\item{perm_boot_reps}{the number of times to repeat each set of permutations}
+
+\item{model}{the model to be used (i.e. model_mbic)}
+
+\item{...}{tuning parameters to be passed to model (i.e. minpv for model_mbic)}
+}
 \description{
 Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats
 }
