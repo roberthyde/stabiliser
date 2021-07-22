@@ -4,7 +4,7 @@
 \alias{permute}
 \title{Permute}
 \usage{
-permute(data, outcome, permutations, perm_boot_reps, model)
+permute(data, outcome, permutations, perm_boot_reps)
 }
 \arguments{
 \item{data}{a dataframe containing an outcome variable to be permuted}

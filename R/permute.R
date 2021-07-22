@@ -15,10 +15,10 @@
 #'
 #utils::globalVariables(c(".", "stab_df", "perm_thresh", "mean_thresh"))
 
-permute <- function(data, outcome, permutations, perm_boot_reps, model) {
+permute <- function(data, outcome, permutations, perm_boot_reps) {
   rsample::permutations(data = data, permute = outcome, times = permutations) %>%
     mutate(
-      stab_df = map(.x = .$splits, .f = ~ as.data.frame(.) %>% boot_model(., outcome = outcome, boot_reps = perm_boot_reps, model = model)),
+      stab_df = map(.x = .$splits, .f = ~ as.data.frame(.) %>% boot_model(., outcome = outcome, boot_reps = perm_boot_reps)),
       perm_thresh = map(stab_df, ~ as_vector(.x$stability) %>%
                           ecdf() %>%
                           quantile(., probs = 1))

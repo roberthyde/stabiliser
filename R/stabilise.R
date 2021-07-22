@@ -18,8 +18,8 @@
 #'
 
 stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps) {
-  perm_thresh <- permute(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps, model = model_mbic)
-  stability <- boot_model(data = data, outcome = outcome, boot_reps = boot_reps, model = model_mbic)
+  perm_thresh <- permute(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps)
+  stability <- boot_model(data = data, outcome = outcome, boot_reps = boot_reps)
 
   list(
     "stability" = stability,
