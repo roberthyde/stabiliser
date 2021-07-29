@@ -4,7 +4,7 @@
 \alias{stabilise}
 \title{stabilise}
 \usage{
-stabilise(data, outcome, boot_reps, permutations, perm_boot_reps)
+stabilise(data, outcome, boot_reps, permutations, perm_boot_reps, models)
 }
 \arguments{
 \item{data}{a dataframe containing an outcome variable to be permuted}
