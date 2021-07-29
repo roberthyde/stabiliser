@@ -17,9 +17,12 @@
 
 utils::globalVariables(c(".", "variable", "stability", "estimate", "quantile", "prop_one_side", "bootstrap_p"))
 
-boot_model <- function(data, outcome, boot_reps) {
-  rsample::bootstraps(data, boot_reps) %>%
-    map_df(.x = .$splits, .f = ~ model_mbic(., outcome = outcome)) %>%
+boot_model <- function(data, outcome, boot_reps, selected_model) {
+  bootstrap_list <- map(1:boot_reps, ~data %>% sample_frac(., 1, replace=TRUE))
+
+  #rsample::bootstraps(data, boot_reps) %>%
+  bootstrap_list %>%
+    map_df(.x = ., .f = ~ as.data.frame(.) %>% selected_model(., outcome = outcome)) %>%
     group_by(variable) %>%
     summarise(mean_coefficient = mean(estimate, na.rm=TRUE),
               ci_lower = quantile(estimate, 0.025, na.rm = TRUE),
