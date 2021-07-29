@@ -14,20 +14,19 @@
 #' @export
 #'
 
-stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, models) {
-
-  model_selector <- function(selected_model){
-    if(selected_model == "lasso"){
-      selcted_model <- model_lasso
-    }
-    else if (selected_model == "mbic"){
-      selected_model <- model_mbic
-    }
+model_selector <- function(selected_model){
+  if(selected_model == "lasso"){
+    selcted_model <- model_lasso
   }
+  else if (selected_model == "mbic"){
+    selected_model <- model_mbic
+  }
+}
 
-  perm_stab <- function(data, outcome, boot_reps, permutations, perm_boot_reps, selected_model){
+perm_stab <- function(data, outcome, boot_reps, permutations, perm_boot_reps, model_name){
 
-  selected_model <- model_selector(selected_model)
+  selected_model <- model_selector(model_name)
+
   print("Permuting...")
   perm_thresh <- permute(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps, selected_model = selected_model)
   print("Permuting...done")
@@ -40,11 +39,11 @@ stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, mo
     "stability" = stability,
     "perm_thresh" = perm_thresh
   )
-  }
+}
 
-  #model_names <- map(models, ~enexpr(.x))
+stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, models) {
 
-  output <- models %>%
+output <- models %>%
     map(., ~perm_stab(data = data,
                                       outcome = outcome,
                                       boot_reps=boot_reps,
@@ -52,7 +51,7 @@ stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, mo
                                       perm_boot_reps=perm_boot_reps,
                                       selected_model = .))
 
-  #names(output) <- model_names
+  names(output) <- models
 
   output
 }
