@@ -8,6 +8,10 @@
 #' @export
 #'
 
+stab_plot <- function(stabiliser_object){
+  map(stabiliser_object, ~stab_boot_plot(.))
+}
+
 stab_boot_plot <- function(model){
   model$stability %>%
     ggplot(aes(x=stability, y=bootstrap_p))+
@@ -16,8 +20,4 @@ stab_boot_plot <- function(model){
     labs(x = "Stability (%)",
          y = "Bootstrap-p")+
     scale_y_reverse()
-}
-
-stab_plot <- function(stabiliser_object){
-  map(stabiliser_object, ~stab_boot_plot(.))
 }

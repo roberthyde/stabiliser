@@ -11,8 +11,23 @@
 #' @import rsample
 #' @import dplyr
 #' @import purrr
-#' @export
 #'
+#' @export
+
+stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, models) {
+
+output <- models %>%
+    map(., ~perm_stab(data = data,
+                      outcome = outcome,
+                      boot_reps=boot_reps,
+                      permutations=permutations,
+                      perm_boot_reps=perm_boot_reps,
+                      model_name = .))
+
+  names(output) <- models
+
+  output
+}
 
 model_selector <- function(selected_model){
   if(selected_model == "lasso"){
@@ -42,19 +57,4 @@ perm_stab <- function(data, outcome, boot_reps, permutations, perm_boot_reps, mo
     "stability" = stability,
     "perm_thresh" = perm_thresh
   )
-}
-
-stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, models) {
-
-output <- models %>%
-    map(., ~perm_stab(data = data,
-                      outcome = outcome,
-                      boot_reps=boot_reps,
-                      permutations=permutations,
-                      perm_boot_reps=perm_boot_reps,
-                      model_name = .))
-
-  names(output) <- models
-
-  output
 }
