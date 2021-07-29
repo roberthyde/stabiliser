@@ -16,8 +16,14 @@
 
 stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, models) {
 
+  model_selector <- function(selected_model){
+    case_when(selected_model == "lasso" ~ model_lasso,
+              selected_model == "mbic" ~ model_mbic)
+  }
+
   perm_stab <- function(data, outcome, boot_reps, permutations, perm_boot_reps, selected_model){
 
+  selected_model <- model_selector(selected_model)
   print("Permuting...")
   perm_thresh <- permute(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps, selected_model = selected_model)
   print("Permuting...done")
