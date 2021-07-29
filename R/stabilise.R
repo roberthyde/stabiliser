@@ -17,8 +17,12 @@
 stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, models) {
 
   model_selector <- function(selected_model){
-    case_when(selected_model == "lasso" ~ model_lasso,
-              selected_model == "mbic" ~ model_mbic)
+    if(selected_model == "lasso"){
+      selcted_model <- model_lasso
+    }
+    else if (selected_model == "mbic"){
+      selected_model <- model_mbic
+    }
   }
 
   perm_stab <- function(data, outcome, boot_reps, permutations, perm_boot_reps, selected_model){
