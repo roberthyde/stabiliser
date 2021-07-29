@@ -9,6 +9,7 @@
 #' @import dplyr
 #' @import broom
 #' @import caret
+#' @importFrom caret trainControl
 #' @importFrom tibble rownames_to_column
 #' @importFrom stats coef
 #' @importFrom utils globalVariables
@@ -31,7 +32,8 @@ model_lasso <- function(data, outcome) {
     train(y ~ .,
         data = .,
         trControl = ctrl,
-        method="glmnet")
+        method="glmnet",
+        tuneGrid = expand.grid(alpha = 1, lambda = 0))  # TODO Currently lambda fixed at zero
 
   coef(fit_lasso$finalModel, fit_lasso$bestTune$lambda) %>%
     broom::tidy() %>%
