@@ -14,7 +14,10 @@
 #' @export
 #'
 
-stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, selected_model) {
+stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, models) {
+
+  perm_stab <- function(data, outcome, boot_reps, permutations, perm_boot_reps, selected_model){
+
   print("Permuting...")
   perm_thresh <- permute(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps, selected_model = selected_model)
   print("Permuting...done")
@@ -27,4 +30,19 @@ stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, se
     "stability" = stability,
     "perm_thresh" = perm_thresh
   )
+  }
+
+  model_names <- map(models, ~enexpr(.x))
+
+  output <- models %>%
+    map(., ~perm_stab(data = data,
+                                      outcome = outcome,
+                                      boot_reps=boot_reps,
+                                      permutations=permutations,
+                                      perm_boot_reps=perm_boot_reps,
+                                      selected_model = .))
+
+  names(output) <- model_names
+
+  output
 }
