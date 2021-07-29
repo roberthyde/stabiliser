@@ -12,6 +12,8 @@
 #' @importFrom utils globalVariables
 #' @importFrom stringr str_remove_all
 #'
+#' @export
+#'
 utils::globalVariables(c(".", "variable", "Estimate"))
 
 model_mbic <- function(data, outcome) {
@@ -40,6 +42,7 @@ model_mbic <- function(data, outcome) {
       !grepl("(Intercept)", variable),
       !grepl("Xm[, -1]", variable)
     ) %>%
-    rename(estimate = Estimate)
+    rename(estimate = Estimate) %>%
+    select(variable, estimate)
 }
 
