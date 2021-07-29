@@ -14,12 +14,12 @@
 #' @export
 #'
 
-stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps) {
+stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, selected_model) {
   print("Permuting...")
-  perm_thresh <- permute(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps)
+  perm_thresh <- permute(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps, selected_model = selected_model)
   print("Permuting...done")
   print("Stabilising...")
-  stability <- boot_model(data = data, outcome = outcome, boot_reps = boot_reps) %>%
+  stability <- boot_model(data = data, outcome = outcome, boot_reps = boot_reps, selected_model = selected_model) %>%
     mutate(significant = case_when(stability >= perm_thresh ~ "*"))
   print("Stabilising...done")
 

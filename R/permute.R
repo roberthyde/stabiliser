@@ -17,16 +17,15 @@
 utils::globalVariables(c("stab_df", "perm_thresh", "mean_thresh"))
 
 permute <- function(data, outcome, permutations, perm_boot_reps, selected_model) {
-  perm_list <- map(1:permutations, ~data %>% mutate(y = sample(y)))
-
-  #rsample::permutations(data = data, permute = outcome, times = permutations)
-  stab_df <- perm_list %>%
-    map(.x = ., .f = ~ boot_model(., outcome = outcome, boot_reps = perm_boot_reps, selected_model = selected_model))
-
-  perm_thresh <- map(stab_df, ~ as_vector(.x$stability) %>%
+  rsample::permutations(data = data, permute = outcome, times = permutations) %>%
+    mutate(
+      stab_df = map(.x = .$splits, .f = ~ as.data.frame(.) %>%
+                      boot_model(., outcome = outcome, boot_reps = perm_boot_reps, selected_model = selected_model)),
+      perm_thresh = map(stab_df, ~ as_vector(.x$stability) %>%
                           ecdf() %>%
-                          quantile(., probs = 1)) %>%
-    bind_rows() %>%
+                          quantile(., probs = 1))
+    ) %>%
+    unnest(perm_thresh) %>%
     summarise(mean_thresh = mean(perm_thresh)) %>%
     pull(mean_thresh)
 }
