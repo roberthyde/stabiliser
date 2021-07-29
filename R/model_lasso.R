@@ -1,6 +1,6 @@
 #' model_lasso
 #'
-#' Function to model mbic selection process on a given dataframe
+#' Function to model lasso selection process on a given dataframe
 #'
 #' @param data a dataframe containing an outcome variable to be permuted (usually coming from nested bootstrap data)
 #' @param outcome the outcome as a string (i.e. "y")
