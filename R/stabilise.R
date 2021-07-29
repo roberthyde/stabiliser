@@ -38,7 +38,7 @@ stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, mo
   )
   }
 
-  model_names <- map(models, ~enexpr(.x))
+  #model_names <- map(models, ~enexpr(.x))
 
   output <- models %>%
     map(., ~perm_stab(data = data,
@@ -48,7 +48,7 @@ stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, mo
                                       perm_boot_reps=perm_boot_reps,
                                       selected_model = .))
 
-  names(output) <- model_names
+  #names(output) <- model_names
 
   output
 }
