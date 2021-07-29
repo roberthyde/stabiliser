@@ -21,19 +21,22 @@ model_selector <- function(selected_model){
   else if (selected_model == "mbic"){
     selected_model <- model_mbic
   }
+  else if (selected_model == "mcp"){
+    selected_model <- model_mcp
+  }
 }
 
 perm_stab <- function(data, outcome, boot_reps, permutations, perm_boot_reps, model_name){
 
   selected_model <- model_selector(model_name)
 
-  print("Permuting...")
+  message("Permuting ", model_name, "...")
   perm_thresh <- permute(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps, selected_model = selected_model)
-  print("Permuting...done")
-  print("Stabilising...")
+  message("Done")
+  message("Stabilising ", model_name, "...")
   stability <- boot_model(data = data, outcome = outcome, boot_reps = boot_reps, selected_model = selected_model) %>%
-    mutate(significant = case_when(stability >= perm_thresh ~ "*"))
-  print("Stabilising...done")
+    mutate(stable = case_when(stability >= perm_thresh ~ "*"))
+  message("Done")
 
   list(
     "stability" = stability,
@@ -45,11 +48,11 @@ stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, mo
 
 output <- models %>%
     map(., ~perm_stab(data = data,
-                                      outcome = outcome,
-                                      boot_reps=boot_reps,
-                                      permutations=permutations,
-                                      perm_boot_reps=perm_boot_reps,
-                                      selected_model = .))
+                      outcome = outcome,
+                      boot_reps=boot_reps,
+                      permutations=permutations,
+                      perm_boot_reps=perm_boot_reps,
+                      model_name = .))
 
   names(output) <- models
 
