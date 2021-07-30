@@ -1,6 +1,8 @@
 #' stab_plot
 #'
-#' Plot from stability object
+#' @name stab_plot
+#'
+#' @description Plot from stability object
 #'
 #' @param stabiliser_outcome outcome from stabiliser() function
 #'

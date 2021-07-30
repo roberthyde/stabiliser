@@ -1,6 +1,8 @@
 #' model_mcp
 #'
-#' Function to model mcp selection process on a given dataframe
+#' @name model_mcp
+#'
+#' @description Function to model mcp selection process on a given dataframe
 #'
 #' @param data a dataframe containing an outcome variable to be permuted (usually coming from nested bootstrap data)
 #' @param outcome the outcome as a string (i.e. "y")
@@ -8,7 +10,7 @@
 #' @import glmnet
 #' @import dplyr
 #' @import ncvreg
-#' @importFrom broom tidy
+#' @import broom
 #' @importFrom tibble rownames_to_column
 #' @importFrom stats coef
 #' @importFrom utils globalVariables

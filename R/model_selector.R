@@ -1,6 +1,8 @@
 #' model_selector
 #'
-#' Determines which models to call.
+#' @name model_selector
+#'
+#' @description Determines which models to call.
 #'
 #'
 utils::globalVariables(c("selected_model"))

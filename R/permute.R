@@ -1,6 +1,8 @@
 #' permute
 #'
-#' Calculates permutation threshold for null model, where a specified model is run over multiple bootstrap resamples of multiple permuted version of the dataset.
+#' @name permute
+#'
+#' @description Calculates permutation threshold for null model, where a specified model is run over multiple bootstrap resamples of multiple permuted version of the dataset.
 #'
 #' @param data a dataframe containing an outcome variable to be permuted
 #' @param outcome the outcome to be permuted as a string (i.e. "y")
@@ -14,19 +16,23 @@
 #' @importFrom utils globalVariables
 #'
 #'
-utils::globalVariables(c("stab_df", "perm_thresh", "mean_thresh"))
+utils::globalVariables(c("stab_df", "perm_thresh", "mean_thresh", "perm_coefs", "perm_stabs"))
 
-permute <- function(data, outcome, permutations, perm_boot_reps, selected_model) {
+perm <- function(data, outcome, permutations, perm_boot_reps, selected_model) {
   rsample::permutations(data = data, permute = outcome, times = permutations) %>%
     mutate(
-      coefs = map(.x = .$splits, .f = ~ as.data.frame(.) %>%
+      perm_coefs = map(.x = .$splits, .f = ~ as.data.frame(.) %>%
         boot_model(., outcome = outcome, boot_reps = perm_boot_reps, selected_model = selected_model)),
-      stab_df = map(coefs, ~ boot_summarise(booted_obj = ., data=data, boot_reps = perm_boot_reps)),
-      perm_thresh = map(stab_df, ~ as_vector(.x$stability) %>%
-        ecdf() %>%
-        quantile(., probs = 1))
-    ) %>%
-    unnest(perm_thresh) %>%
-    summarise(mean_thresh = mean(perm_thresh)) %>%
-    pull(mean_thresh)
+      perm_stabs = map(perm_coefs, ~ boot_summarise(booted_obj = ., data=data, boot_reps = perm_boot_reps)))
+}
+
+perm_summarise <- function(permed_object){
+  permed_object %>%
+    mutate(perm_thresh = map(perm_stabs, ~ as_vector(.x$stability) %>%
+                      ecdf() %>%
+                      quantile(., probs = 1))
+           ) %>%
+  unnest(perm_thresh) %>%
+  summarise(mean_thresh = mean(perm_thresh)) %>%
+  pull(mean_thresh)
 }

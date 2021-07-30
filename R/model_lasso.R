@@ -1,13 +1,15 @@
 #' model_lasso
 #'
-#' Function to model lasso selection process on a given dataframe
+#' @name model_lasso
+#'
+#' @description Function to model lasso selection process on a given dataframe
 #'
 #' @param data a dataframe containing an outcome variable to be permuted (usually coming from nested bootstrap data)
 #' @param outcome the outcome as a string (i.e. "y")
 #'
 #' @import glmnet
 #' @import dplyr
-#' @importFrom broom tidy
+#' @import broom
 #' @importFrom caret train
 #' @importFrom caret trainControl
 #' @importFrom tibble rownames_to_column
@@ -15,7 +17,6 @@
 #' @importFrom utils globalVariables
 #' @importFrom stringr str_remove_all
 #'
-#' @export
 #'
 utils::globalVariables(c(".", "variable", "estimate", "value"))
 
