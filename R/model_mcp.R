@@ -8,7 +8,7 @@
 #' @import glmnet
 #' @import dplyr
 #' @import ncvreg
-#' @import broom
+#' @importFrom broom tidy
 #' @importFrom tibble rownames_to_column
 #' @importFrom stats coef
 #' @importFrom utils globalVariables
@@ -16,7 +16,7 @@
 #'
 #'
 
-utils::globalVariables(c(".", "variable", "estimate"))
+utils::globalVariables(c(".", "variable", "estimate", "x"))
 
 model_mcp <- function(data, outcome) {
   data <- data %>%

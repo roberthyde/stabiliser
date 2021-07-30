@@ -5,8 +5,10 @@
 #' @param stabiliser_outcome outcome from stabiliser() function
 #'
 #' @import ggplot2
+#' @importFrom purrr map
 #' @export
 #'
+utils::globalVariables(c("stabiliser_outcome"))
 
 stab_plot <- function(stabiliser_object) {
   map(stabiliser_object, ~ stab_boot_plot(.))

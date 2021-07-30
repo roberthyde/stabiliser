@@ -2,6 +2,8 @@
 #'
 #' Determines which models to call.
 #'
+#'
+utils::globalVariables(c("selected_model"))
 
 model_selector <- function(selected_model) {
   if (selected_model == "lasso") {

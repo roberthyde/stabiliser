@@ -7,8 +7,8 @@
 #'
 #' @import glmnet
 #' @import dplyr
-#' @import broom
-#' @import caret
+#' @importFrom broom tidy
+#' @importFrom caret train
 #' @importFrom caret trainControl
 #' @importFrom tibble rownames_to_column
 #' @importFrom stats coef
@@ -17,10 +17,10 @@
 #'
 #' @export
 #'
-utils::globalVariables(c(".", "variable", "estimate"))
+utils::globalVariables(c(".", "variable", "estimate", "value"))
 
 model_lasso <- function(data, outcome) {
-  ctrl <- trainControl(
+  ctrl <- caret::trainControl(
     method = "repeatedcv",
     number = 5,
     repeats = 5
@@ -30,8 +30,7 @@ model_lasso <- function(data, outcome) {
     as.data.frame()
 
   fit_lasso <- data %>%
-    na.omit() %>%
-    train(y ~ .,
+    caret::train(y ~ .,
       data = .,
       trControl = ctrl,
       method = "glmnet",

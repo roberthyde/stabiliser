@@ -8,7 +8,7 @@
 #' @param perm_boot_reps the number of times to repeat each set of permutations
 #'
 #' @import dplyr
-#' @import purrr
+#' @importFrom purrr map
 #' @importFrom tidyr unnest
 #' @importFrom rsample permutations
 #' @importFrom utils globalVariables
@@ -19,8 +19,9 @@ utils::globalVariables(c("stab_df", "perm_thresh", "mean_thresh"))
 permute <- function(data, outcome, permutations, perm_boot_reps, selected_model) {
   rsample::permutations(data = data, permute = outcome, times = permutations) %>%
     mutate(
-      stab_df = map(.x = .$splits, .f = ~ as.data.frame(.) %>%
+      coefs = map(.x = .$splits, .f = ~ as.data.frame(.) %>%
         boot_model(., outcome = outcome, boot_reps = perm_boot_reps, selected_model = selected_model)),
+      stab_df = map(coefs, ~ boot_summarise(booted_obj = ., data=data, boot_reps = perm_boot_reps)),
       perm_thresh = map(stab_df, ~ as_vector(.x$stability) %>%
         ecdf() %>%
         quantile(., probs = 1))

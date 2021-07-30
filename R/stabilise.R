@@ -10,9 +10,10 @@
 #'
 #' @import rsample
 #' @import dplyr
-#' @import purrr
+#' @importFrom purrr map
 #'
 #' @export
+utils::globalVariables(c("models"))
 
 stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, models) {
   output <- models %>%
