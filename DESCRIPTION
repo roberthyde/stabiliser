@@ -33,5 +33,9 @@ Imports:
     purrr,
     tidyr,
     stringr,
-    ggplot2
+    ggplot2,
+    broom,
+    caret,
+    glmnet,
+    ncvreg
 VignetteBuilder: knitr
