@@ -1,20 +1,33 @@
 #' triangulate
 #'
-#' Triangulate multiple models using a stability object
+#' @name triangulate
+#'
+#' @description Triangulate multiple models using a stability object
 #'
 #' @param object an object generated through the stability() function
 #'
 #' @import dplyr
+#' @importFrom stats ecdf
 #'
 #' @export
-utils::globalVariables(c("object", "key", "value"))
+#'
+
+utils::globalVariables(c("object", "model", "perm_stabs"))
 
 triangulate <- function(object) {
-  # TODO recalculate based on original matrix
-  perm_thresh <- map_df(object, ~ .x$perm_thresh, .id = "model") %>%
-    gather(key, value) %>%
-    summarise(perm_thresh = mean(value, na.rm = TRUE)) %>%
-    pull(perm_thresh)
+  #Mean stability across all models for each permutation
+  perm_mean_stab <- map_df(object, ~ .x$perm_coefs, .id = "model") %>%
+    select(model, perm_stabs) %>%
+    unnest(cols = c(perm_stabs)) %>%
+    group_by(variable) %>%
+    summarise(stability = mean(stability, na.rm=TRUE)) %>%
+    arrange(desc(stability))
+
+  #Calculate perm threshold across all of these
+  perm_thresh <- as.vector(perm_mean_stab$stability) %>%
+    ecdf() %>%
+    quantile(., probs = 1) %>%
+    as.numeric()
 
   stability <- map_df(object, ~ .x$stability, .id = "model") %>%
     group_by(variable) %>%

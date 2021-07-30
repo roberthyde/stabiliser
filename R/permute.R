@@ -28,7 +28,7 @@ perm <- function(data, outcome, permutations, perm_boot_reps, selected_model) {
 
 perm_summarise <- function(permed_object){
   permed_object %>%
-    mutate(perm_thresh = map(perm_stabs, ~ as_vector(.x$stability) %>%
+    mutate(perm_thresh = map(perm_stabs, ~ as.vector(.x$stability) %>%
                       ecdf() %>%
                       quantile(., probs = 1))
            ) %>%

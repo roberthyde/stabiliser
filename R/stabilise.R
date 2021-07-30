@@ -1,6 +1,8 @@
 #' stabilise
 #'
-#' Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats
+#' @name stabilise
+#'
+#' @description Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats
 #'
 #' @param data a dataframe containing an outcome variable to be permuted
 #' @param outcome the outcome as a string (i.e. "y")

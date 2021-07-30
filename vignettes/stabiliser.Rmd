@@ -17,3 +17,13 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(stabiliser)
 ```
+
+## Stabiliser
+
+## Triangulation
+
+## Plotting
+
+## Extracting coefficients
+
+It is possible to extract the full coefficients of selected variables for each bootstrap resample.
