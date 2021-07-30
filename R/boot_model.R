@@ -9,7 +9,7 @@
 #'
 #' @import rsample
 #' @import dplyr
-#' @import purrr
+#' @importFrom purrr map_df
 #' @importFrom utils globalVariables
 #' @importFrom tidyr replace_na
 #' @importFrom stats quantile
@@ -19,7 +19,11 @@ utils::globalVariables(c(".", "variable", "stability", "estimate", "quantile", "
 
 boot_model <- function(data, outcome, boot_reps, selected_model) {
   rsample::bootstraps(data, boot_reps) %>%
-    map_df(.x = .$splits, .f = ~ as.data.frame(.) %>% selected_model(., outcome = outcome)) %>%
+    map_df(.x = .$splits, .f = ~ as.data.frame(.) %>% selected_model(., outcome = outcome), .id = "bootstrap")
+}
+
+boot_summarise <- function(booted_obj, data, boot_reps){
+  booted_obj %>%
     group_by(variable) %>%
     summarise(
       mean_coefficient = mean(estimate, na.rm = TRUE),
