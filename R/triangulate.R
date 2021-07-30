@@ -9,16 +9,16 @@
 #' @export
 
 
-triangulate <- function(object){
-
-  perm_thresh <- map_df(stab_output, ~.x$perm_thresh, .id="model") %>%
+triangulate <- function(object) {
+  # TODO recalculate based on original matrix
+  perm_thresh <- map_df(stab_output, ~ .x$perm_thresh, .id = "model") %>%
     gather(key, value) %>%
-    summarise(perm_thresh = mean(value, na.rm=TRUE)) %>%
+    summarise(perm_thresh = mean(value, na.rm = TRUE)) %>%
     pull(perm_thresh)
 
-  stability <- map_df(stab_output, ~.x$stability, .id="model") %>%
+  stability <- map_df(stab_output, ~ .x$stability, .id = "model") %>%
     group_by(variable) %>%
-    summarise(stability = sum(stability, na.rm=TRUE)/length(stab_output)) %>%
+    summarise(stability = sum(stability, na.rm = TRUE) / length(stab_output)) %>%
     arrange(desc(stability)) %>%
     mutate(stable = case_when(stability >= perm_thresh ~ "*"))
 

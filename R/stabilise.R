@@ -15,14 +15,15 @@
 #' @export
 
 stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, models) {
-
-output <- models %>%
-    map(., ~perm_stab(data = data,
-                      outcome = outcome,
-                      boot_reps=boot_reps,
-                      permutations=permutations,
-                      perm_boot_reps=perm_boot_reps,
-                      model_name = .))
+  output <- models %>%
+    map(., ~ perm_stab(
+      data = data,
+      outcome = outcome,
+      boot_reps = boot_reps,
+      permutations = permutations,
+      perm_boot_reps = perm_boot_reps,
+      model_name = .
+    ))
 
   names(output) <- models
 

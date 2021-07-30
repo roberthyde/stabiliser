@@ -18,7 +18,7 @@
 
 utils::globalVariables(c(".", "variable", "estimate"))
 
-model_mcp <- function(data, outcome){
+model_mcp <- function(data, outcome) {
   data <- data %>%
     as.data.frame()
 
@@ -34,8 +34,12 @@ model_mcp <- function(data, outcome){
   fit_mcp %>%
     coef() %>%
     broom::tidy() %>%
-    rename(variable = names,
-           estimate = x) %>%
-    filter(variable != "(Intercept)",
-           estimate != 0)
+    rename(
+      variable = names,
+      estimate = x
+    ) %>%
+    filter(
+      variable != "(Intercept)",
+      estimate != 0
+    )
 }

@@ -19,7 +19,7 @@ utils::globalVariables(c(".", "variable", "Estimate"))
 model_mbic <- function(data, outcome) {
   data <- data %>%
     as.data.frame()
-
+  # TODO all_of might not work with doparralel, perhaps change to !!outcome ? see tidymodels parralel explanation.
   y_temp <- data %>%
     select(all_of(outcome)) %>%
     as.matrix()
@@ -45,4 +45,3 @@ model_mbic <- function(data, outcome) {
     rename(estimate = Estimate) %>%
     select(variable, estimate)
 }
-

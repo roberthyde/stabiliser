@@ -4,8 +4,7 @@
 #'
 
 
-perm_stab <- function(data, outcome, boot_reps, permutations, perm_boot_reps, model_name){
-
+perm_stab <- function(data, outcome, boot_reps, permutations, perm_boot_reps, model_name) {
   selected_model <- model_selector(model_name)
 
   message("Permuting ", model_name, "...")
