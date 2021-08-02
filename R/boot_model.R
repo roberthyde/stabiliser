@@ -19,8 +19,12 @@
 
 utils::globalVariables(c(".", "variable", "stability", "estimate", "quantile", "prop_one_side", "bootstrap_p"))
 
+boot_sample <- function(data, boot_reps) {
+  rsample::bootstraps(data, boot_reps)
+}
+
 boot_model <- function(data, outcome, boot_reps, selected_model) {
-  rsample::bootstraps(data, boot_reps) %>%
+  data %>%
     map_df(.x = .$splits, .f = ~ as.data.frame(.) %>% selected_model(., outcome = outcome), .id = "bootstrap")
 }
 
