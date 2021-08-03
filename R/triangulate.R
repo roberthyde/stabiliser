@@ -12,8 +12,8 @@
 #' @export
 #'
 
-utils::globalVariables(c("object", "model", "perm_stabs"))
-object <- stab_output
+utils::globalVariables(c("object", "model", "perm_stabs", "permutation"))
+
 triangulate <- function(object) {
   #Mean stability across all models for each permutation
   perm_thresh <- map_df(object, ~ .x$perm_coefs, .id = "model") %>%
