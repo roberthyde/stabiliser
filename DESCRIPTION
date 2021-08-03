@@ -23,7 +23,8 @@ Depends:
 Suggests: 
     rmarkdown,
     knitr,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    markdown
 Config/testthat/edition: 3
 Imports: 
     dplyr,
@@ -37,6 +38,5 @@ Imports:
     broom,
     caret,
     glmnet,
-    ncvreg,
-    markdown
+    ncvreg
 VignetteBuilder: knitr
