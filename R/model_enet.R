@@ -18,7 +18,7 @@
 #' @importFrom stringr str_remove_all
 #'
 #'
-utils::globalVariables(c(".", "variable", "estimate", "value"))
+utils::globalVariables(c(".", "variable", "estimate", "value", "name", "coefficient"))
 
 model_enet <- function(data, outcome) {
   #ctrl <- caret::trainControl(
@@ -56,12 +56,24 @@ model_enet <- function(data, outcome) {
     select(-all_of(outcome)) %>%
     as.matrix()
 
-  fit_lasso <- cv.glmnet(x=x_temp, y=y_temp, type.measure = "mae", nfolds = 10)
+  #fit_glmnet <- glmnet(x=x_temp, y=y_temp)
 
-  coef(fit_lasso, s = "lambda.min") %>%
-    broom::tidy() %>%
-    rename(variable = row,
-           estimate = value) %>%
+  # fit_glmnet %>%
+  #  broom::tidy() %>%
+  #  arrange(desc(step))
+  #  filter(dev.ratio == max(dev.ratio)) %>%
+  #  rename(variable = term) %>%
+  #  filter(variable != "(Intercept)") %>%
+  #  select(variable, estimate)
+
+  #CV fit
+  fit_glmnet <- cv.glmnet(x=x_temp, y=y_temp)
+
+  coefs <- coef(fit_glmnet, s = "lambda.min")
+
+  data.frame(name = coefs@Dimnames[[1]][coefs@i + 1], coefficient = coefs@x) %>%
+    rename(variable = name,
+           estimate = coefficient) %>%
     filter(variable != "(Intercept)") %>%
     select(variable, estimate)
 }
