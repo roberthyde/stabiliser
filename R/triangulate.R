@@ -28,7 +28,7 @@ triangulate <- function(object) {
       bootstrap_p = mean(bootstrap_p, na.rm=TRUE)
     ) %>%
     arrange(desc(stability)) %>%
-    mutate(stable = case_when(stability >= perm_thresh ~ "*"))
+    mutate(stable = case_when(stability > perm_thresh ~ "*"))
 
   list(
     "combi" = list(
