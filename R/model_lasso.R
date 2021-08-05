@@ -56,7 +56,7 @@ model_lasso <- function(data, outcome) {
     select(-all_of(outcome)) %>%
     as.matrix()
 
-   fit_lasso <- cv.glmnet(x=x_temp, y=y_temp, alpha = 1, type.measure = "mae", nfolds = 5)
+   fit_lasso <- cv.glmnet(x=x_temp, y=y_temp, alpha = 1, type.measure = "mae", nfolds = 10)
 
    coef(fit_lasso, s = "lambda.min") %>%
     broom::tidy() %>%
