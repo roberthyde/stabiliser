@@ -18,6 +18,7 @@ stab_plot <- function(stabiliser_object) {
 
 stab_boot_plot <- function(model) {
   model$stability %>%
+    filter(!is.na(bootstrap_p)) %>%
     ggplot(aes(x = stability, y = bootstrap_p)) +
     geom_jitter(height = 0.05, width = 1) +
     geom_vline(xintercept = model$perm_thresh) +
