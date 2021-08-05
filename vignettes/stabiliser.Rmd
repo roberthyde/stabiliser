@@ -106,8 +106,11 @@ Both `stabilise()` and `triangulate()` outputs can be plotted using `stab_plot()
 ```{r eval=FALSE}
 stab_plot(stabiliser_object = triangulated)
 ```
+
 ```{r stab_plot, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+
 triangulated$combi$stability %>%
     filter(!is.na(bootstrap_p)) %>%
     mutate(causal = case_when(grepl("causal", variable) ~ "Causal",
