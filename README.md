@@ -162,7 +162,7 @@ causal variables as being “stable”, and being highly likely to be
 associated with the outcome `y`, in contrast to the 2 variables
 identified when using elastic net alone.
 
-### Visualisation
+### `stab_plot()`
 
 Both `stabilise()` and `triangulate()` outputs can be plotted using
 `stab_plot()` as follows, with causal and junk variables highlighted for

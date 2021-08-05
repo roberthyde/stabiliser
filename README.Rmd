@@ -103,7 +103,7 @@ This shows variables consistently being identified as being stable across multip
 
 Triangulating the results for stability selection across multiple model types generally provides better performance at identifying truly causal variables than single model approaches (Lima et al., 2021). As shown in this example, the triangulated approach identifies 3 out of the 4 truly causal variables as being "stable", and being highly likely to be associated with the outcome `y`, in contrast to the 2 variables identified when using elastic net alone.
 
-### Visualisation
+### `stab_plot()`
 
 Both `stabilise()` and `triangulate()` outputs can be plotted using `stab_plot()` as follows, with causal and junk variables highlighted for this example: 
 
