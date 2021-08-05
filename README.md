@@ -172,16 +172,7 @@ this example:
 stab_plot(stabiliser_object = triangulated)
 ```
 
-    #> -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-    #> v ggplot2 3.3.5     v purrr   0.3.4
-    #> v tibble  3.1.3     v dplyr   1.0.7
-    #> v tidyr   1.1.3     v stringr 1.4.0
-    #> v readr   2.0.0     v forcats 0.5.1
-    #> -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-    #> x dplyr::filter() masks stats::filter()
-    #> x dplyr::lag()    masks stats::lag()
-
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-stab_plot-1.png" width="100%" />
 
 ## References
 

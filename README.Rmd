@@ -110,7 +110,7 @@ Both `stabilise()` and `triangulate()` outputs can be plotted using `stab_plot()
 ```{r eval=FALSE}
 stab_plot(stabiliser_object = triangulated)
 ```
-```{r echo=FALSE}
+```{r stab_plot, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE}
 library(tidyverse)
 triangulated$combi$stability %>%
     filter(!is.na(bootstrap_p)) %>%
