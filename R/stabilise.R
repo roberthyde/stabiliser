@@ -17,7 +17,7 @@
 #' @export
 utils::globalVariables(c("models"))
 
-stabilise <- function(data, outcome, boot_reps, permutations, perm_boot_reps, models) {
+stabilise <- function(data, outcome, boot_reps=100, permutations=5, perm_boot_reps=20, models=c("enet")) {
 
   boot_data = boot_sample(data=data, boot_reps=boot_reps)
   perm_data = perm_sample(data=data, outcome=outcome, permutations = permutations, perm_boot_reps = perm_boot_reps)
