@@ -26,5 +26,6 @@ stab_boot_plot <- function(model) {
       x = "Stability (%)",
       y = "Bootstrap-p"
     ) +
-    scale_y_reverse()
+    scale_y_reverse()+
+    theme_minimal()
 }
