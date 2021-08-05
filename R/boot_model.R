@@ -45,8 +45,7 @@ boot_summarise <- function(booted_obj, data, boot_reps){
     select(-prop_one_side) %>%
     right_join(tibble(variable = colnames(data)), by = "variable") %>%
     replace_na(list(
-      stability = 0,
-      bootstrap_p = 1
+      stability = 0
     )) %>%
     arrange(desc(stability))
 }
