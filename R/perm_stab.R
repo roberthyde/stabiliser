@@ -19,7 +19,7 @@ perm_stab <- function(data, boot_data, perm_data, outcome, boot_reps, permutatio
   message("Stabilising ", model_name, "...")
   coefs <- boot_model(data = boot_data, outcome = outcome, boot_reps = boot_reps, selected_model = selected_model)
   stability <- boot_summarise(booted_obj = coefs, data = data, boot_reps = boot_reps) %>%
-    mutate(stable = case_when(stability >= perm_thresh ~ "*"))
+    mutate(stable = case_when(stability > perm_thresh ~ "*"))
   message("Done")
 
   list(
