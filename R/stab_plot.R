@@ -4,7 +4,7 @@
 #'
 #' @description Plot from stability object
 #'
-#' @param stabiliser_outcome outcome from stabiliser() function
+#' @param stabiliser_outcome Outcome from stabilise() or triangulate() function.
 #'
 #' @import ggplot2
 #' @importFrom purrr map

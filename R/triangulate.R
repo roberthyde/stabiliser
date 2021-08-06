@@ -4,7 +4,7 @@
 #'
 #' @description Triangulate multiple models using a stability object
 #'
-#' @param object an object generated through the stability() function
+#' @param object An object generated through the stabilise() function.
 #'
 #' @import dplyr
 #' @importFrom stats ecdf

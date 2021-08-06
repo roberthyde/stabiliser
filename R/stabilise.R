@@ -4,11 +4,12 @@
 #'
 #' @description Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats
 #'
-#' @param data a dataframe containing an outcome variable to be permuted
-#' @param outcome the outcome as a string (i.e. "y")
-#' @param boot_reps the number of bootstrap samples
-#' @param permutations the number of times to be permuted per repeat
-#' @param perm_boot_reps the number of times to repeat each set of permutations
+#' @param data A dataframe containing an outcome variable to be permuted.
+#' @param outcome The outcome as a string (i.e. "y").
+#' @param boot_reps The number of bootstrap samples. Default is "auto" which selects number based on dataframe size.
+#' @param permutations The number of times to be permuted per repeat. Default is "auto" which selects number based on dataframe size.
+#' @param perm_boot_reps The number of times to repeat each set of permutations. Default is 5.
+#' @param models The models to select for stabilising. Default is elastic net (models = c("enet")), other available models include "lasso", "mbic", "mcp".
 #'
 #' @import rsample
 #' @import dplyr
