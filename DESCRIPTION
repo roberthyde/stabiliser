@@ -1,6 +1,6 @@
 Package: stabiliser
 Title: stabiliser: Robust variable selection using stability selection
-Version: 0.0.0.90
+Version: 0.1.0
 Authors@R: 
     c(
     person(given = "Robert",
