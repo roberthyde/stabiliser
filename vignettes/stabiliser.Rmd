@@ -36,7 +36,7 @@ The stabiliser_example dataset is a simulated example with the following propert
 * 4 variables simulated to be associated with `y`: `causal1`, `causal2`... 
 * 95 variables simulated to have no association with `y`: `junk1`, `junk2`...
 
-```{r }
+```{r warning=FALSE}
 library(stabiliser)
 data("stabiliser_example")
 ```
