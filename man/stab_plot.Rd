@@ -4,7 +4,7 @@
 \alias{stab_plot}
 \title{stab_plot}
 \arguments{
-\item{stabiliser_outcome}{outcome from stabiliser() function}
+\item{stabiliser_outcome}{Outcome from stabilise() or triangulate() function.}
 }
 \description{
 Plot from stability object

@@ -4,7 +4,7 @@
 \alias{triangulate}
 \title{triangulate}
 \arguments{
-\item{object}{an object generated through the stability() function}
+\item{object}{An object generated through the stabilise() function.}
 }
 \description{
 Triangulate multiple models using a stability object

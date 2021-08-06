@@ -4,15 +4,17 @@
 \alias{stabilise}
 \title{stabilise}
 \arguments{
-\item{data}{a dataframe containing an outcome variable to be permuted}
+\item{data}{A dataframe containing an outcome variable to be permuted.}
 
-\item{outcome}{the outcome as a string (i.e. "y")}
+\item{outcome}{The outcome as a string (i.e. "y").}
 
-\item{boot_reps}{the number of bootstrap samples}
+\item{boot_reps}{The number of bootstrap samples. Default is "auto" which selects number based on dataframe size.}
 
-\item{permutations}{the number of times to be permuted per repeat}
+\item{permutations}{The number of times to be permuted per repeat. Default is "auto" which selects number based on dataframe size.}
 
-\item{perm_boot_reps}{the number of times to repeat each set of permutations}
+\item{perm_boot_reps}{The number of times to repeat each set of permutations. Default is 5.}
+
+\item{models}{The models to select for stabilising. Default is elastic net (models = c("enet")), other available models include "lasso", "mbic", "mcp".}
 }
 \description{
 Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats
