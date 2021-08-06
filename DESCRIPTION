@@ -16,7 +16,7 @@ Authors@R:
            family = "Lima",
            role = c("aut"),
            email = "eliana.lima1@nottingham.ac.uk"))       
-Description: Variable selection through stabilty selection and the use of an objective threshold based on a model from permuted data.
+Description: Variable selection through stability selection and the use of an objective threshold based on a model from permuted data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
