@@ -1,5 +1,5 @@
 Package: stabiliser
-Title: Robust variable selection using stability selection
+Title: Robust Variable Selection using Stability Selection
 Version: 0.1.0
 Authors@R: 
     c(

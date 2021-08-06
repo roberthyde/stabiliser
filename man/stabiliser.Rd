@@ -4,7 +4,7 @@
 \name{stabiliser}
 \alias{stabiliser}
 \alias{stabiliser-package}
-\title{stabiliser: Robust variable selection using stability selection}
+\title{Robust Variable Selection using Stability Selection}
 \description{
 This package uses bootstrap resampling and an objective selection stability threshold to provide a robust method of selecting variables truly associated with an outcome.
 }
