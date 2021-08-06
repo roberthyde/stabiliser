@@ -20,15 +20,14 @@
 
 utils::globalVariables(c("models"))
 
-stabilise <- function(data, outcome, boot_reps="auto", permutations="auto", perm_boot_reps=20, models=c("enet")) {
-
+stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", perm_boot_reps = 20, models = c("enet")) {
   boot_reps <- rep_selector_boot(data = data, boot_reps = boot_reps)
   permutations <- rep_selector_perm(data = data, permutations = permutations)
 
   message("Stabilising across ", boot_reps, " bootstrap resamples. Permuting ", permutations, " times, with ", perm_boot_reps, " bootstrap samples for each permutation.")
 
-  boot_data <- boot_sample(data=data, boot_reps=boot_reps)
-  perm_data <- perm_sample(data=data, outcome=outcome, permutations = permutations, perm_boot_reps = perm_boot_reps)
+  boot_data <- boot_sample(data = data, boot_reps = boot_reps)
+  perm_data <- perm_sample(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps)
 
   output <- models %>%
     map(., ~ perm_stab(

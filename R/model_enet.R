@@ -21,16 +21,16 @@
 utils::globalVariables(c(".", "variable", "estimate", "value", "name", "coefficient"))
 
 model_enet <- function(data, outcome) {
-  #ctrl <- caret::trainControl(
+  # ctrl <- caret::trainControl(
   #  method = "repeatedcv",
   #  number = 5,
   #  repeats = 5
-  #)#
+  # )#
 
-  #data <- data %>%
+  # data <- data %>%
   #  as.data.frame()
 
-  #fit_lasso <- data %>%
+  # fit_lasso <- data %>%
   #  caret::train(y ~ .,
   #    data = .,
   #    trControl = ctrl,
@@ -38,7 +38,7 @@ model_enet <- function(data, outcome) {
   #    tuneGrid = expand.grid(alpha = 1, lambda = 0)
   #  ) # TODO Currently lambda fixed at zero
 
-  #coef(fit_lasso$finalModel, fit_lasso$bestTune$lambda) %>%
+  # coef(fit_lasso$finalModel, fit_lasso$bestTune$lambda) %>%
   #  broom::tidy() %>%
   #  rename(
   #    variable = row,
@@ -56,7 +56,7 @@ model_enet <- function(data, outcome) {
     select(-all_of(outcome)) %>%
     as.matrix()
 
-  #fit_glmnet <- glmnet(x=x_temp, y=y_temp)
+  # fit_glmnet <- glmnet(x=x_temp, y=y_temp)
 
   # fit_glmnet %>%
   #  broom::tidy() %>%
@@ -66,14 +66,16 @@ model_enet <- function(data, outcome) {
   #  filter(variable != "(Intercept)") %>%
   #  select(variable, estimate)
 
-  #CV fit
-  fit_glmnet <- cv.glmnet(x=x_temp, y=y_temp)
+  # CV fit
+  fit_glmnet <- cv.glmnet(x = x_temp, y = y_temp)
 
   coefs <- coef(fit_glmnet, s = "lambda.min")
 
   data.frame(name = coefs@Dimnames[[1]][coefs@i + 1], coefficient = coefs@x) %>%
-    rename(variable = name,
-           estimate = coefficient) %>%
+    rename(
+      variable = name,
+      estimate = coefficient
+    ) %>%
     filter(variable != "(Intercept)") %>%
     select(variable, estimate)
 }

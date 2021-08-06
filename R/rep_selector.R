@@ -10,16 +10,16 @@
 #' @import dplyr
 #'
 
-rep_selector_boot <- function(data, boot_reps){
-  if(boot_reps == "auto"){
-    if(nrow(data) < 200){
+rep_selector_boot <- function(data, boot_reps) {
+  if (boot_reps == "auto") {
+    if (nrow(data) < 200) {
       200
-      }else{
-        100
-      }
-  }else{
-      boot_reps
+    } else {
+      100
     }
+  } else {
+    boot_reps
+  }
 }
 
 #' rep_selector_boot
@@ -32,14 +32,14 @@ rep_selector_boot <- function(data, boot_reps){
 #' @param permutations the number of times to be permuted per repeat
 #'
 
-rep_selector_perm <- function(data, permutations){
-  if(permutations == "auto"){
-    if(nrow(data) < 200){
+rep_selector_perm <- function(data, permutations) {
+  if (permutations == "auto") {
+    if (nrow(data) < 200) {
       10
-    }else{
+    } else {
       5
     }
-  }else{
+  } else {
     permutations
   }
 }

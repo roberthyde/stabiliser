@@ -28,7 +28,7 @@ boot_model <- function(data, outcome, boot_reps, selected_model) {
     map_df(.x = .$splits, .f = ~ as.data.frame(.) %>% selected_model(., outcome = outcome), .id = "bootstrap")
 }
 
-boot_summarise <- function(booted_obj, data, boot_reps){
+boot_summarise <- function(booted_obj, data, boot_reps) {
   booted_obj %>%
     group_by(variable) %>%
     summarise(
