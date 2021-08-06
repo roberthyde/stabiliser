@@ -11,7 +11,11 @@ Authors@R:
     person(given = "Martin",
            family = "Green",
            role = c("aut"),
-           email = "martin.green@nottingham.ac.uk"))       
+           email = "martin.green@nottingham.ac.uk"),
+    person(given = "Eliana",
+           family = "Lima",
+           role = c("aut"),
+           email = "eliana.lima1@nottingham.ac.uk"))       
 Description: Variable selection through stabilty selection and the use of an objective threshold based on a model from permuted data.
 License: MIT + file LICENSE
 Encoding: UTF-8
