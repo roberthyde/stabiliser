@@ -14,8 +14,6 @@
 #' @importFrom utils globalVariables
 #' @importFrom stringr str_remove_all
 #'
-#' @export
-#'
 utils::globalVariables(c(".", "variable", "Estimate"))
 
 model_mbic <- function(data, outcome) {
