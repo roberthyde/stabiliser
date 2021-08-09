@@ -8,6 +8,7 @@ A stable approach to variable selection through stability selection and the use 
 
 ### Please add \value to .Rd files regarding exported methods and explain the functions results in the documentation.
 Added value descriptions to the .Rd files for the three exported functions; stabilise, triangulate and stab_plot
+Value descriptions not added for functions that are not exported (i.e. boot_model.Rd, model_enet etc.)
 
 ## Test environments
 * local Windows install, R 4.1.0
