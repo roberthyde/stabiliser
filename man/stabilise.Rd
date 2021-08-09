@@ -16,6 +16,9 @@
 
 \item{models}{The models to select for stabilising. Default is elastic net (models = c("enet")), other available models include "lasso", "mbic", "mcp".}
 }
+\value{
+A list for each model selected. Each list contains a dataframe of variable stabilities, a numeric permutation threshold, and a dataframe of coefficients for both bootstrap and permutation.
+}
 \description{
 Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats
 }

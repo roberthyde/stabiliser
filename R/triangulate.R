@@ -6,6 +6,8 @@
 #'
 #' @param object An object generated through the stabilise() function.
 #'
+#' @return A combined list of model results including a dataframe of stability results for variables, and a numeric permutation threshold.
+#'
 #' @import dplyr
 #' @importFrom stats ecdf
 #'

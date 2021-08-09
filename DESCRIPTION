@@ -1,5 +1,5 @@
 Package: stabiliser
-Title: Robust Variable Selection using Stability Selection
+Title: Stabilising Variable Selection
 Version: 0.1.0
 Authors@R: 
     c(
@@ -16,7 +16,7 @@ Authors@R:
            family = "Lima",
            role = c("aut"),
            email = "eliana.lima1@nottingham.ac.uk"))       
-Description: Variable selection through stability selection and the use of an objective threshold based on a model from permuted data.
+Description: A stable approach to variable selection through stability selection and the use of an objective threshold based on a model from permuted data. References: Meinshausen and Bühlmann (2010) doi.org/10.1111/j.1467-9868.2010.00740.x, Lima et al (2021) doi.org/10.1038/s41598-020-79317-8.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

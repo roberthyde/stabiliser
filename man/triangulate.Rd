@@ -6,6 +6,9 @@
 \arguments{
 \item{object}{An object generated through the stabilise() function.}
 }
+\value{
+A combined list of model results including a dataframe of stability results for variables, and a numeric permutation threshold.
+}
 \description{
 Triangulate multiple models using a stability object
 }

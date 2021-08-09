@@ -1,4 +1,4 @@
-#' stabiliser: Robust variable selection using stability selection
+#' stabiliser
 #'
 #' This package uses bootstrap resampling and an objective selection stability threshold to provide a robust method of selecting variables truly associated with an outcome.
 #'
