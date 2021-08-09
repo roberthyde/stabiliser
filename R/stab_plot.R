@@ -6,6 +6,8 @@
 #'
 #' @param stabiliser_outcome Outcome from stabilise() or triangulate() function.
 #'
+#' @return A ggplot object.
+#'
 #' @import ggplot2
 #' @importFrom purrr map
 #' @export

@@ -6,6 +6,9 @@
 \arguments{
 \item{stabiliser_outcome}{Outcome from stabilise() or triangulate() function.}
 }
+\value{
+A ggplot object.
+}
 \description{
 Plot from stability object
 }
