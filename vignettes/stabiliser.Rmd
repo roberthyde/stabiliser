@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The goal of the stabiliser package is to provide a flexible method of applying stability selection (Meinshausen 2010) with various model types, and the framework for triangulating the results for multiple models (Lima et al., 2021). 
+The goal of the stabiliser package is to provide a flexible method of applying stability selection (Meinshausen and Buhlmann, 2010) with various model types, and the framework for triangulating the results for multiple models (Lima et al., 2021). 
 
 * `stabilise()` performs stability selection on a range of models to identify causal models.
 * `triangulate()` identifies which variables are most likely to be causal across all models. 
@@ -130,5 +130,5 @@ triangulated$combi$stability %>%
 ## References
 Lima, E., Hyde, R., Green, M., 2021. Model selection for inferential models with high dimensional data: synthesis and graphical representation of multiple techniques. Sci. Rep. 11, 412. https://doi.org/10.1038/s41598-020-79317-8
 
-Meinshausen, N., Bühlmann, P., 2010. Stability selection. J. R. Stat. Soc. Ser. B (Statistical Methodol. 72, 417–473. https://doi.org/10.1111/j.1467-9868.2010.00740.x
+Meinshausen, N., Buhlmann, P., 2010. Stability selection. J. R. Stat. Soc. Ser. B (Statistical Methodol. 72, 417–473. https://doi.org/10.1111/j.1467-9868.2010.00740.x
 
