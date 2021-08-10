@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 # stabiliser
 
-The goal of the stabiliser package is to provide a flexible method of applying stability selection (Meinshausen 2010) with various model types, and the framework for triangulating the results for multiple models (Lima et al., 2021). 
+The goal of the stabiliser package is to provide a flexible method of applying stability selection (Meinshausen and Buhlmann, 2010) with various model types, and the framework for triangulating the results for multiple models (Lima et al., 2021). 
 
 * `stabilise()` performs stability selection on a range of models to identify causal models.
 * `triangulate()` identifies which variables are most likely to be causal across all models. 
@@ -34,7 +34,7 @@ devtools::install_github("roberthyde/stabiliser")
 
 ## Usage
 
-The stabiliser_example dataset is a simulated example with the following properties:
+The stabiliser_example is a simulated example dataset with 50 observations of the following variables:
 
 * 1 simulated outcome variable: `y`
 * 4 variables simulated to be associated with `y`: `causal1`, `causal2`... 
@@ -49,23 +49,27 @@ data("stabiliser_example")
 
 To attempt to identify which variables are truly "causal" in this dataset using a selection stability approach, use the `stabilise()` function as follows:
 
+```{r echo=FALSE}
+set.seed(8144)
+```
+
+
 ```{r message=FALSE, warning=FALSE, error=FALSE}
-set.seed(8141)
 stable_enet <- stabilise(data = stabiliser_example,
                          outcome = "y")
 ```
 
-Access the stability (percentage of 100 bootstrap resamples where a given variable was selected by a given model) results for elastic net as follows:
+Access the stability (percentage of bootstrap resamples where a given variable was selected by a given model) results for elastic net as follows:
 
 ```{r}
 stable_enet$enet$stability
 ```
 
-This ranks the variables by stability, and displays the mean coefficients, 95% confidence interval and bootstrap p-value. It also displays whether the variable is deemed "stable", in this case 2 out of the 4 truly causal variables are identified as "stable", with no false positives. 
+This ranks the variables by stability, and displays the mean coefficients, 95% confidence interval and bootstrap p-value. It also displays whether the variable is deemed "stable", in this case 3 out of the 4 truly causal variables are identified as "stable", with no false positives. 
 
-By default, this implements an elastic net algorithm over 100 bootstrap resamples of the dataset. Stability of each variable is then calculated as the proportion of bootstrap repeats where that variable is selected in the model. 
+By default, this implements an elastic net algorithm over a number of bootstrap resamples of the dataset (200 resamples for small datasets). The stability of each variable is then calculated as the proportion of bootstrap repeats where that variable is selected in the model. 
 
-`stabilise()` also permutes the outcome several times (5 by default) and performs the same process on each permuted dataset (20 bootstrap resamples for each by default).
+`stabilise()` also permutes the outcome several times (10 by default for small datasets) and performs the same process on each permuted dataset (20 bootstrap resamples for each by default).
 
 This allows a permutation threshold to be calculated. Variables with a non-permuted stability % above this threshold are deemed "stable" as they were selected in a higher proportion of bootstrap resamples than in the permuted datasets, where we know there is no association between variables and the outcome.  
 
@@ -81,8 +85,11 @@ Our confidence that a given variable is truly associated with a given outcome mi
 
 Specify multiple model types (elastic net, mbic and mcp) for comparison using the `stabilise()` function as follows:
 
+```{r echo=FALSE}
+set.seed(8144)
+```
+
 ```{r message=FALSE, warning=FALSE, error=FALSE}
-set.seed(8141)
 stable_combi <- stabilise(data = stabiliser_example,
                          outcome = "y",
                          models = c("enet",
@@ -101,7 +108,7 @@ triangulated
 
 This shows variables consistently being identified as being stable across multiple model types, and consequently increasing our confidence that they are truly associated with the outcome. 
 
-Triangulating the results for stability selection across multiple model types generally provides better performance at identifying truly causal variables than single model approaches (Lima et al., 2021). As shown in this example, the triangulated approach identifies 3 out of the 4 truly causal variables as being "stable", and being highly likely to be associated with the outcome `y`, in contrast to the 2 variables identified when using elastic net alone.
+Triangulating the results for stability selection across multiple model types generally provides better performance at identifying truly causal variables than single model approaches (Lima et al., 2021). As shown in this example, the triangulated approach identifies 3 out of the 4 truly causal variables as being "stable", and being highly likely to be associated with the outcome `y`.
 
 ### `stab_plot()`
 
@@ -131,4 +138,4 @@ triangulated$combi$stability %>%
 ## References
 Lima, E., Hyde, R., Green, M., 2021. Model selection for inferential models with high dimensional data: synthesis and graphical representation of multiple techniques. Sci. Rep. 11, 412. https://doi.org/10.1038/s41598-020-79317-8
 
-Meinshausen, N., Bühlmann, P., 2010. Stability selection. J. R. Stat. Soc. Ser. B (Statistical Methodol. 72, 417–473. https://doi.org/10.1111/j.1467-9868.2010.00740.x
+Meinshausen, N., Buhlmann, P., 2010. Stability selection. J. R. Stat. Soc. Ser. B (Statistical Methodol. 72, 417–473. https://doi.org/10.1111/j.1467-9868.2010.00740.x
