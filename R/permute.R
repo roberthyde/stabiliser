@@ -23,10 +23,10 @@ perm_sample <- function(data, outcome, permutations, perm_boot_reps) {
     map_df(.x = .$splits, .f = ~ as.data.frame(.) %>% boot_sample(., perm_boot_reps), .id = "permutation")
 }
 
-perm_model <- function(perm_data, data, outcome, permutations, perm_boot_reps, selected_model) {
+perm_model <- function(perm_data, data, outcome, perm_boot_reps, selected_model, type) {
   perm_data %>%
     mutate(perm_coefs = map(.x = .$splits, .f = ~ as.data.frame(.) %>%
-      selected_model(., outcome = outcome), .id = "bootstrap")) %>%
+      selected_model(., outcome = outcome, type = type), .id = "bootstrap")) %>%
     select(-splits) %>%
     unnest(perm_coefs) %>%
     select(-id) %>%

@@ -6,6 +6,7 @@
 #'
 #' @param data a dataframe containing an outcome variable to be permuted (usually coming from nested bootstrap data)
 #' @param outcome the outcome as a string (i.e. "y")
+#' @param type model type, either "linear" or "logistic"
 #'
 #' @import glmnet
 #' @import dplyr
@@ -20,34 +21,11 @@
 #'
 utils::globalVariables(c(".", "variable", "estimate", "value"))
 
-model_lasso <- function(data, outcome) {
-  # ctrl <- caret::trainControl(
-  #  method = "repeatedcv",
-  #  number = 5,
-  #  repeats = 5
-  # )#
+model_lasso <- function(data, outcome, type) {
 
-  # data <- data %>%
-  #  as.data.frame()
+  type = case_when(type == "logistic" ~ "binomial",
+                   type == "linear" ~ "gaussian")
 
-  # fit_lasso <- data %>%
-  #  caret::train(y ~ .,
-  #    data = .,
-  #    trControl = ctrl,
-  #    method = "glmnet",
-  #    tuneGrid = expand.grid(alpha = 1, lambda = 0)
-  #  ) # TODO Currently lambda fixed at zero
-
-  # coef(fit_lasso$finalModel, fit_lasso$bestTune$lambda) %>%
-  #  broom::tidy() %>%
-  #  rename(
-  #    variable = row,
-  #    estimate = value
-  #  ) %>%
-  #  filter(variable != "(Intercept)") %>%
-  #  select(variable, estimate)
-
-  # Or use glmnet directly
   y_temp <- data %>%
     select(all_of(outcome)) %>%
     as.matrix()
@@ -56,14 +34,14 @@ model_lasso <- function(data, outcome) {
     select(-all_of(outcome)) %>%
     as.matrix()
 
-  fit_lasso <- cv.glmnet(x = x_temp, y = y_temp, alpha = 1, type.measure = "mae", nfolds = 10)
+  fit_lasso <- cv.glmnet(x = x_temp, y = y_temp, alpha = 1, type.measure = "mae", nfolds = 10, family = type)
 
   coef(fit_lasso, s = "lambda.min") %>%
-    broom::tidy() %>%
+    as.matrix() %>%
+    as_tibble(rownames = "variable") %>%
     rename(
-      variable = row,
-      estimate = value
+      estimate = `1`
     ) %>%
-    filter(variable != "(Intercept)") %>%
-    select(variable, estimate)
+    filter(variable != "(Intercept)")
+
 }

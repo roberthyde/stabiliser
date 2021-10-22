@@ -6,7 +6,7 @@
 #'
 #'
 utils::globalVariables(c("selected_model"))
-
+# TODO Add custom model function, user can input their own model structure as long as it adheres to a specific structure of input and output values.
 model_selector <- function(selected_model) {
   if (selected_model == "enet") {
     selcted_model <- model_enet

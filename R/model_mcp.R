@@ -6,6 +6,7 @@
 #'
 #' @param data a dataframe containing an outcome variable to be permuted (usually coming from nested bootstrap data)
 #' @param outcome the outcome as a string (i.e. "y")
+#' @param type model type, either "linear" or "logistic"
 #'
 #' @import glmnet
 #' @import dplyr
@@ -20,7 +21,7 @@
 
 utils::globalVariables(c(".", "variable", "estimate", "x"))
 
-model_mcp <- function(data, outcome) {
+model_mcp <- function(data, outcome, type) {
   data <- data %>%
     as.data.frame()
 
@@ -35,10 +36,9 @@ model_mcp <- function(data, outcome) {
 
   fit_mcp %>%
     coef() %>%
-    broom::tidy() %>%
+    as_tibble(rownames = "variable") %>%
     rename(
-      variable = names,
-      estimate = x
+      estimate = value
     ) %>%
     filter(
       variable != "(Intercept)",
