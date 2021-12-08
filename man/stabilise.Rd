@@ -15,6 +15,8 @@
 \item{perm_boot_reps}{The number of times to repeat each set of permutations. Default is 5.}
 
 \item{models}{The models to select for stabilising. Default is elastic net (models = c("enet")), other available models include "lasso", "mbic", "mcp".}
+
+\item{type}{The type of model, either "linear" or "logistic"}
 }
 \value{
 A list for each model selected. Each list contains a dataframe of variable stabilities, a numeric permutation threshold, and a dataframe of coefficients for both bootstrap and permutation.

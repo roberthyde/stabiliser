@@ -12,9 +12,8 @@
 #' @import dplyr
 #' @importFrom purrr map
 #' @importFrom tidyr unnest
-#' @importFrom rsample permutations
 #' @importFrom utils globalVariables
-#'
+#' @importFrom rsample permutations
 #'
 utils::globalVariables(c("stab_df", "perm_thresh", "mean_thresh", "perm_coefs", "perm_stabs", "splits", "permutation"))
 
