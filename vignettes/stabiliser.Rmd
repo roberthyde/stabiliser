@@ -25,6 +25,12 @@ The goal of the stabiliser package is to provide a flexible method of applying s
 You can install this package from github using the devtools package as follows:
 
 ```{r eval=FALSE}
+install.packages("stabiliser")
+```
+
+Or to get the most recent development version:
+
+```{r eval=FALSE}
 devtools::install_github("roberthyde/stabiliser")
 ```
 
