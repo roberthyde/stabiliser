@@ -19,7 +19,7 @@
 #' @importFrom stringr str_remove_all
 #'
 #'
-utils::globalVariables(c(".", "variable", "estimate", "value"))
+utils::globalVariables(c(".", "variable", "estimate", "value", "1"))
 
 model_lasso <- function(data, outcome, type) {
 
