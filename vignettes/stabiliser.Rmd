@@ -3,7 +3,7 @@ title: "stabiliser"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{stabiliser}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 

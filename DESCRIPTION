@@ -42,5 +42,6 @@ Imports:
     caret,
     glmnet,
     ncvreg,
-    knitr
+    knitr,
+    pandoc
 VignetteBuilder: knitr
