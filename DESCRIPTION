@@ -26,7 +26,6 @@ Depends:
     R (>= 2.10)
 Suggests: 
     rmarkdown,
-    knitr,
     testthat (>= 3.0.0),
     markdown
 Config/testthat/edition: 3
@@ -42,5 +41,6 @@ Imports:
     broom,
     caret,
     glmnet,
-    ncvreg
+    ncvreg,
+    knitr
 VignetteBuilder: knitr
