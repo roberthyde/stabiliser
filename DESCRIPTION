@@ -27,7 +27,8 @@ Depends:
 Suggests: 
     rmarkdown,
     testthat (>= 3.0.0),
-    markdown
+    markdown,
+    knitr
 Config/testthat/edition: 3
 Imports: 
     dplyr,
@@ -42,6 +43,5 @@ Imports:
     caret,
     glmnet,
     ncvreg,
-    knitr,
-    pandoc
+    knitr
 VignetteBuilder: knitr
