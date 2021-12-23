@@ -8,7 +8,6 @@
 #' @param outcome the outcome as a string (i.e. "y")
 #' @param type model type, either "linear" or "logistic"
 #' @keywords internal
-#' @import glmnet
 #' @import dplyr
 #' @import ncvreg
 #' @import broom
