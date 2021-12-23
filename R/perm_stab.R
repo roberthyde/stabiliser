@@ -3,7 +3,7 @@
 #' @name perm_stab
 #'
 #' @description Main function to call both permutation and bootstrapping functions; to be looped over multiple models selected by the user.
-#'
+#' @keywords internal
 #' @importFrom tidyr nest
 #'
 

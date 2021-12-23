@@ -13,4 +13,4 @@ sim_dat
 \description{
 A simulated dataset
 }
-\keyword{datasets}
+\keyword{internal}

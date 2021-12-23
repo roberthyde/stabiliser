@@ -3,7 +3,7 @@
 #' A simulated dataset
 #'
 #' @format A data frame with 100 rows and 1001 variables:
-#'
+#' @keywords internal
 "sim_dat"
 
 # \item{x variables}{variables simulated to have a relationship with y}

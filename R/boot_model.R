@@ -8,7 +8,7 @@
 #' @param outcome the outcome as a string (i.e. "y")
 #' @param boot_reps the number of bootstrap samples
 #' @param model the model to be used (i.e. model_mbic)
-#'
+#' @keywords internal
 #' @import rsample
 #' @import dplyr
 #' @importFrom purrr map_df

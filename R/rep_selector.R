@@ -6,7 +6,7 @@
 #'
 #' @param data the dataset to analyse.
 #' @param boot_reps the number of bootstrap samples
-#'
+#' @keywords internal
 #' @import dplyr
 #'
 
@@ -30,7 +30,7 @@ rep_selector_boot <- function(data, boot_reps) {
 #'
 #' @param data the dataset to analyse.
 #' @param permutations the number of times to be permuted per repeat
-#'
+#' @keywords internal
 
 rep_selector_perm <- function(data, permutations) {
   if (permutations == "auto") {

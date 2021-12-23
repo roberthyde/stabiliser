@@ -8,7 +8,7 @@
 #' @param outcome the outcome to be permuted as a string (i.e. "y")
 #' @param permutations the number of times to be permuted per repeat
 #' @param perm_boot_reps the number of times to repeat each set of permutations
-#'
+#' @keywords internal
 #' @import dplyr
 #' @importFrom purrr map
 #' @importFrom tidyr unnest

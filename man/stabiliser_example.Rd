@@ -6,6 +6,7 @@
 \title{stabiliser_example}
 \format{
 A data frame with 50 rows and 100 variables.
+
 The stabiliser_example dataset is a simulated example with the following properties:
 1 simulated outcome variable: \code{y}
 4 variables simulated to be associated with \code{y}: \code{causal1}, \code{causal2}...

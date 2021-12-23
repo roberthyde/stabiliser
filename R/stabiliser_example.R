@@ -3,6 +3,7 @@
 #' A simulated dataset
 #'
 #' @format A data frame with 50 rows and 100 variables.
+#'
 #' The stabiliser_example dataset is a simulated example with the following properties:
 #' 1 simulated outcome variable: `y`
 #' 4 variables simulated to be associated with `y`: `causal1`, `causal2`...

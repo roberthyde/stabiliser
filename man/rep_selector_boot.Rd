@@ -14,3 +14,4 @@ rep_selector_boot(data, boot_reps)
 \description{
 wrapper function to determine the number of bootstrap repeats
 }
+\keyword{internal}

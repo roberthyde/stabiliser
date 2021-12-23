@@ -3,7 +3,7 @@
 #' @name model_selector
 #'
 #' @description Determines which models to call.
-#'
+#' @keywords internal
 #'
 utils::globalVariables(c("selected_model"))
 # TODO Add custom model function, user can input their own model structure as long as it adheres to a specific structure of input and output values.

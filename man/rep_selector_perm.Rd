@@ -14,3 +14,4 @@ rep_selector_perm(data, permutations)
 \description{
 wrapper function to determine the number of permutations
 }
+\keyword{internal}

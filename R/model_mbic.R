@@ -1,5 +1,13 @@
 #' model_mbic
 #'
+#' @name model_mbic
+#'
+#' @description Function to model mbic selection process on a given dataframe
+#'
+#' @param data a dataframe containing an outcome variable to be permuted (usually coming from nested bootstrap data)
+#' @param outcome the outcome as a string (i.e. "y")
+#' @param type model type, either "linear" or "logistic"
+#' @keywords internal
 #' @import bigstep
 #' @import dplyr
 #' @importFrom tibble rownames_to_column

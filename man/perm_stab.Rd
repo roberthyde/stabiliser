@@ -6,3 +6,4 @@
 \description{
 Main function to call both permutation and bootstrapping functions; to be looped over multiple models selected by the user.
 }
+\keyword{internal}

@@ -7,4 +7,5 @@
 #' @author Eliana Lima
 #' @docType package
 #' @name stabiliser
+#' @keywords internal
 "_PACKAGE"

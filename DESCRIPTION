@@ -23,12 +23,11 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Depends: 
-    R (>= 2.10)
+    R (>= 3.6.0)
 Suggests: 
     rmarkdown,
     testthat (>= 3.0.0),
     markdown
-Config/testthat/edition: 3
 Imports: 
     dplyr,
     bigstep,
