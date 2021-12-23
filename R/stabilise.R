@@ -20,7 +20,6 @@
 #'
 #' @export
 #'
-# TODO Add binary options
 
 utils::globalVariables(c("models"))
 
