@@ -29,6 +29,7 @@ Suggests:
     testthat (>= 3.0.0),
     markdown
 Imports: 
+    glmnet (== 3.0),
     dplyr,
     bigstep,
     rsample,
@@ -39,7 +40,6 @@ Imports:
     ggplot2,
     broom,
     caret,
-    glmnet,
     ncvreg,
     knitr
 VignetteBuilder: knitr
