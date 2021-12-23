@@ -15,7 +15,6 @@
 #' @importFrom utils globalVariables
 #' @importFrom stringr str_remove_all
 #'
-# TODO Remove descriptions etc from non-exported functions
 
 utils::globalVariables(c(".", "variable", "Estimate"))
 
