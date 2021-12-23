@@ -8,9 +8,9 @@
 #' @param outcome the outcome as a string (i.e. "y")
 #' @param type model type, either "linear" or "logistic"
 #' @keywords internal
-#' @import glmnet
 #' @import dplyr
 #' @import broom
+#' @importFrom glmnet cv.glmnet
 #' @importFrom caret train
 #' @importFrom caret trainControl
 #' @importFrom tibble rownames_to_column
