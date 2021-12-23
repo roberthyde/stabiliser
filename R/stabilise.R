@@ -20,7 +20,6 @@
 #'
 #' @export
 #'
-
 utils::globalVariables(c("models"))
 
 stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", perm_boot_reps = 20, models = c("enet"), type = "linear") {
