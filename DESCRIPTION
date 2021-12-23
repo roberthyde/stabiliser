@@ -30,7 +30,6 @@ Suggests:
     testthat (>= 3.0.0),
     markdown
 Imports: 
-    glmnet (>= 3.0),
     dplyr,
     bigstep,
     rsample,
