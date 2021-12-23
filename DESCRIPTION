@@ -30,6 +30,7 @@ Suggests:
     testthat (>= 3.0.0),
     markdown
 Imports: 
+    glmnet,
     dplyr,
     bigstep,
     rsample,
@@ -43,5 +44,3 @@ Imports:
     ncvreg,
     knitr
 VignetteBuilder: knitr
-Remotes: 
-    url::https://github.com/cran/glmnet/tree/9bddccd362d9f3839c7fa0a158e5e98a5a06bfcb
