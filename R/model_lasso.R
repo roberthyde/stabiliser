@@ -40,7 +40,7 @@ model_lasso <- function(data, outcome, type) {
     as.matrix() %>%
     as_tibble(rownames = "variable") %>%
     rename(
-      estimate = `1`
+      estimate = `s1`
     ) %>%
     filter(variable != "(Intercept)")
 
