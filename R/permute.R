@@ -8,6 +8,7 @@
 #' @param outcome the outcome to be permuted as a string (i.e. "y")
 #' @param permutations the number of times to be permuted per repeat
 #' @param perm_boot_reps the number of times to repeat each set of permutations
+#' @param quantile The quantile of null stabilities to use as a threshold.
 #' @keywords internal
 #' @import dplyr
 #' @importFrom purrr map
@@ -23,6 +24,7 @@ perm_sample <- function(data, outcome, permutations, perm_boot_reps) {
 }
 
 perm_model <- function(perm_data, data, outcome, perm_boot_reps, selected_model, type) {
+  # TODO: Doesn't function well with long factor names
   perm_data %>%
     mutate(perm_coefs = map(.x = .$splits, .f = ~ as.data.frame(.) %>%
       selected_model(., outcome = outcome, type = type), .id = "bootstrap")) %>%
@@ -36,12 +38,12 @@ perm_model <- function(perm_data, data, outcome, perm_boot_reps, selected_model,
       boot_summarise(booted_obj = ., data = data, boot_reps = perm_boot_reps), .id = "permutation")
 }
 
-perm_summarise <- function(permed_object) {
+perm_summarise <- function(permed_object, quantile) {
   permed_object %>%
     group_by(permutation) %>%
     summarise(perm_thresh = as.vector(stability) %>%
       ecdf() %>%
-      quantile(., probs = 1)) %>%
+      quantile(., probs = quantile)) %>%
     summarise(mean_thresh = mean(perm_thresh, na.rm = TRUE)) %>%
     pull(mean_thresh)
 }
