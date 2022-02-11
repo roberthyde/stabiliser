@@ -49,4 +49,5 @@ model_mcp <- function(data, outcome, type) {
       !grepl("Xm[, -1]", variable)
     ) %>%
     mutate(variable = str_remove_all(variable, "`"))
+
 }
