@@ -21,6 +21,9 @@
 utils::globalVariables(c(".", "variable", "estimate", "x"))
 
 model_mcp <- function(data, outcome, type) {
+  type <- case_when(type == "logistic" ~ "binomial",
+                    type == "linear" ~ "gaussian")
+
   data <- data %>%
     as.data.frame()
 
@@ -31,7 +34,7 @@ model_mcp <- function(data, outcome, type) {
   x_temp <- data %>%
     select(-all_of(outcome))
 
-  fit_mcp <- cv.ncvreg(X = x_temp, y = y_temp)
+  fit_mcp <- cv.ncvreg(X = x_temp, y = y_temp, family = type)
 
   fit_mcp %>%
     coef() %>%
@@ -41,6 +44,9 @@ model_mcp <- function(data, outcome, type) {
     ) %>%
     filter(
       variable != "(Intercept)",
-      estimate != 0
-    )
+      estimate != 0,
+      !grepl("(Intercept)", variable),
+      !grepl("Xm[, -1]", variable)
+    ) %>%
+    mutate(variable = str_remove_all(variable, "`"))
 }
