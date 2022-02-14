@@ -11,6 +11,8 @@
 \item{permutations}{the number of times to be permuted per repeat}
 
 \item{perm_boot_reps}{the number of times to repeat each set of permutations}
+
+\item{quantile}{The quantile of null stabilities to use as a threshold.}
 }
 \description{
 Calculates permutation threshold for null model, where a specified model is run over multiple bootstrap resamples of multiple permuted version of the dataset.

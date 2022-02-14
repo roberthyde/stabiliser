@@ -34,14 +34,15 @@ model_lasso <- function(data, outcome, type) {
     select(-all_of(outcome)) %>%
     as.matrix()
 
-  fit_lasso <- cv.glmnet(x = x_temp, y = y_temp, alpha = 1, type.measure = "mae", nfolds = 10, family = type)
+  fit_lasso <- cv.glmnet(x = x_temp, y = y_temp, alpha = 1, family = type)
 
-  coef(fit_lasso, s = "lambda.min") %>%
-    as.matrix() %>%
-    as_tibble(rownames = "variable") %>%
+  coefs <- coef(fit_lasso, s = "lambda.min")
+
+  data.frame(name = coefs@Dimnames[[1]][coefs@i + 1], coefficient = coefs@x) %>%
     rename(
-      estimate = s1
+      variable = name,
+      estimate = coefficient
     ) %>%
-    filter(variable != "(Intercept)")
-
+    filter(variable != "(Intercept)") %>%
+    select(variable, estimate)
 }

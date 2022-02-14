@@ -17,6 +17,8 @@
 \item{models}{The models to select for stabilising. Default is elastic net (models = c("enet")), other available models include "lasso", "mbic", "mcp".}
 
 \item{type}{The type of model, either "linear" or "logistic"}
+
+\item{quantile}{The quantile of null stabilities to use as a threshold.}
 }
 \value{
 A list for each model selected. Each list contains a dataframe of variable stabilities, a numeric permutation threshold, and a dataframe of coefficients for both bootstrap and permutation.

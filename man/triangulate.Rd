@@ -5,6 +5,8 @@
 \title{triangulate}
 \arguments{
 \item{object}{An object generated through the stabilise() function.}
+
+\item{quantile}{The quantile of null stabilities to use as a threshold.}
 }
 \value{
 A combined list of model results including a dataframe of stability results for variables and a numeric permutation threshold.

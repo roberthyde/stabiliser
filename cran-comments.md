@@ -1,6 +1,6 @@
-## Update to stabiliser version 0.1.1
+## Update to stabiliser version 0.1.2
 
-This is an update to version 0.1.0.
+This is an update to version 0.1.1.
 
 ### Previous CRAN comments:
 
