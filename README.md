@@ -23,6 +23,12 @@ You can install this package from github using the devtools package as
 follows:
 
 ``` r
+devtools::install.packages("stabiliser")
+```
+
+Or using the developmental version as follows: 
+
+``` r
 devtools::install_github("roberthyde/stabiliser")
 ```
 

@@ -1,6 +1,7 @@
-## Update to stabiliser version 0.1.2
+## Update to stabiliser version 1.0.1
 
-This is an update to version 0.1.1.
+This is an update to version 0.1.2.
+Now added simulate_data() function. 
 
 ### Previous CRAN comments:
 

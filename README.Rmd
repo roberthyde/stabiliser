@@ -18,15 +18,22 @@ knitr::opts_chunk$set(
 
 # stabiliser
 
-The goal of the stabiliser package is to provide a flexible method of applying stability selection (Meinshausen and Buhlmann, 2010) with various model types, and the framework for triangulating the results for multiple models (Lima et al., 2021). 
+The goal of the \pkg{stabiliser} package is to provide a flexible method of applying stability selection (Meinshausen and Buhlmann, 2010) with various model types, and the framework for triangulating the results for multiple models (Lima et al., 2021). 
 
 * `stabilise()` performs stability selection on a range of models to identify causal models.
 * `triangulate()` identifies which variables are most likely to be causal across all models. 
 * `stab_plot()` allows visualisation of either `stabilise()` or `triangulate()` outputs. 
+* `simulate_data()` allows the simulation of datasets to facilitate user the comparison of various statistical methods.
 
 ## Installation
 
 You can install this package from github using the devtools package as follows:
+
+```{r eval=FALSE}
+install.packages("stabiliser")
+```
+
+Or using the developmental version as follows:
 
 ```{r eval=FALSE}
 devtools::install_github("roberthyde/stabiliser")
@@ -134,6 +141,36 @@ triangulated$combi$stability %>%
     scale_y_reverse()+
     theme_minimal()
 ```
+
+### `simulate_data()`
+
+To determine the optimum statistical approach, it can be useful to simulate datasets that are simular to those being explored within a research project, but with known outcomes. 
+
+The \pkg{stabiliser} package includes a `simulate_data()` function, which allows the user to simulate a dataset as follows:
+
+* `nrows`: the number of rows to simulate.
+* `ncols`: The number of columns to simulate.
+* `n_true`: The number of variables truly associated with the outcome.
+* `amplitude`: The strength of association between true variables and the outcome.
+
+For example, simulating a 5 row dataset, with 5 explanatory variables, where 2 variables are truly associated with the outcome with a signal strength of 8 would be conducted using the code below. Note that the variables simulated to be truly associated with the outcome are labeled as "true_", and variables that are randomly generated labeled as "junk_". 
+
+```{r}
+simulate_data(nrows=5, 
+              ncols=5,
+              n_true=2,
+              amplitude=8)
+```
+
+It can also be interesting to simulate datasets with no variables associated with the outcome (other than by chance). This can be done by setting `n_true` to zero (or leaving to the default of zero).
+
+```{r}
+simulate_data(nrows=5, 
+              ncols=5,
+              n_true=0)
+```
+
+By using simulated datasets with no signal other than by chance, it is possible to explore various modeling approaches to determine how many false positive variables might be selected with a given approach. 
 
 ## References
 Lima, E., Hyde, R., Green, M., 2021. Model selection for inferential models with high dimensional data: synthesis and graphical representation of multiple techniques. Sci. Rep. 11, 412. https://doi.org/10.1038/s41598-020-79317-8
