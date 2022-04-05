@@ -11,9 +11,9 @@ types, and the framework for triangulating the results for multiple
 models (Lima et al., 2021).
 
 -   `stabilise()` performs stability selection on a range of models to
-    identify causal models.
+    identify variables truly associated with an outcome.
 -   `triangulate()` identifies which variables are most likely to be
-    causal across all models.
+    associated with an outcome across all models.
 -   `stab_plot()` allows visualisation of either `stabilise()` or
     `triangulate()` outputs.
 -   `simulate_data()` allows the simulation of datasets to facilitate

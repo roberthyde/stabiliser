@@ -20,8 +20,8 @@ knitr::opts_chunk$set(
 
 The goal of the \pkg{stabiliser} package is to provide a flexible method of applying stability selection (Meinshausen and Buhlmann, 2010) with various model types, and the framework for triangulating the results for multiple models (Lima et al., 2021). 
 
-* `stabilise()` performs stability selection on a range of models to identify causal models.
-* `triangulate()` identifies which variables are most likely to be causal across all models. 
+* `stabilise()` performs stability selection on a range of models to identify variables truly associated with an outcome.
+* `triangulate()` identifies which variables are most likely to be associated with an outcome across all models. 
 * `stab_plot()` allows visualisation of either `stabilise()` or `triangulate()` outputs. 
 * `simulate_data()` allows the simulation of datasets to facilitate user the comparison of various statistical methods.
 
