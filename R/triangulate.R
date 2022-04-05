@@ -17,12 +17,12 @@
 
 utils::globalVariables(c("object", "model", "perm_stabs", "permutation"))
 
-triangulate <- function(object, quantile=1) {
+triangulate <- function(object, quantile = 1) {
   # Mean stability across all models for each permutation
   perm_thresh <- map_df(object, ~ .x$perm_coefs, .id = "model") %>%
     group_by(permutation, variable) %>%
     summarise(stability = mean(stability, na.rm = TRUE)) %>%
-    perm_summarise(permed_object = ., quantile=quantile)
+    perm_summarise(permed_object = ., quantile = quantile)
 
   stability <- map_df(object, ~ .x$stability, .id = "model") %>%
     group_by(variable) %>%

@@ -15,7 +15,7 @@
 #'
 #' @export
 
-simulate <- function(nrows, ncols, n_true=0, amplitude=0) {
+simulate <- function(nrows, ncols, n_true = 0, amplitude = 0) {
   # Generate the variables from a multivariate normal distribution
   mu <- rep(0, ncols)
   rho <- 0.25
@@ -33,8 +33,8 @@ simulate <- function(nrows, ncols, n_true=0, amplitude=0) {
 
   ## Rename true variables as "true_" and junk variables as "junk_"
   x <- x %>%
-    rename_with(~paste0("true_", .x), .cols = nonzero) %>%
-    rename_with(~paste0("junk_", .x), .cols = !nonzero)
+    rename_with(~ paste0("true_", .x), .cols = nonzero) %>%
+    rename_with(~ paste0("junk_", .x), .cols = !nonzero)
 
   return(as.data.frame(cbind(outcome, x)))
 }

@@ -21,8 +21,10 @@
 utils::globalVariables(c(".", "variable", "estimate", "x"))
 
 model_mcp <- function(data, outcome, type) {
-  type <- case_when(type == "logistic" ~ "binomial",
-                    type == "linear" ~ "gaussian")
+  type <- case_when(
+    type == "logistic" ~ "binomial",
+    type == "linear" ~ "gaussian"
+  )
 
   data <- data %>%
     as.data.frame()
@@ -49,5 +51,4 @@ model_mcp <- function(data, outcome, type) {
       !grepl("Xm[, -1]", variable)
     ) %>%
     mutate(variable = str_remove_all(variable, "`"))
-
 }

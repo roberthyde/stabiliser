@@ -22,9 +22,10 @@
 utils::globalVariables(c(".", "variable", "estimate", "value", "name", "coefficient"))
 
 model_enet <- function(data, outcome, type) {
-
-  type = case_when(type == "logistic" ~ "binomial",
-                   type == "linear" ~ "gaussian")
+  type <- case_when(
+    type == "logistic" ~ "binomial",
+    type == "linear" ~ "gaussian"
+  )
 
   y_temp <- data %>%
     select(all_of(outcome)) %>%
