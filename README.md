@@ -5,10 +5,10 @@
 
 # stabiliser
 
-The goal of the stabiliser package is to provide a flexible method of
-applying stability selection (Meinshausen and Buhlmann, 2010) with
-various model types, and the framework for triangulating the results for
-multiple models (Lima et al., 2021).
+The goal of the package is to provide a flexible method of applying
+stability selection (Meinshausen and Buhlmann, 2010) with various model
+types, and the framework for triangulating the results for multiple
+models (Lima et al., 2021).
 
 -   `stabilise()` performs stability selection on a range of models to
     identify causal models.
@@ -16,6 +16,8 @@ multiple models (Lima et al., 2021).
     causal across all models.
 -   `stab_plot()` allows visualisation of either `stabilise()` or
     `triangulate()` outputs.
+-   `simulate_data()` allows the simulation of datasets to facilitate
+    user the comparison of various statistical methods.
 
 ## Installation
 
@@ -23,10 +25,10 @@ You can install this package from github using the devtools package as
 follows:
 
 ``` r
-devtools::install.packages("stabiliser")
+install.packages("stabiliser")
 ```
 
-Or using the developmental version as follows: 
+Or using the developmental version as follows:
 
 ``` r
 devtools::install_github("roberthyde/stabiliser")
@@ -34,7 +36,7 @@ devtools::install_github("roberthyde/stabiliser")
 
 ## Usage
 
-The stabiliser\_example is a simulated example dataset with 50
+The stabiliser_example is a simulated example dataset with 50
 observations of the following variables:
 
 -   1 simulated outcome variable: `y`
@@ -176,6 +178,61 @@ stab_plot(stabiliser_object = triangulated)
 ```
 
 <img src="man/figures/README-stab_plot-1.png" width="100%" />
+
+### `simulate_data()`
+
+To determine the optimum statistical approach, it can be useful to
+simulate datasets that are simular to those being explored within a
+research project, but with known outcomes.
+
+The package includes a `simulate_data()` function, which allows the user
+to simulate a dataset as follows:
+
+-   `nrows`: the number of rows to simulate.
+-   `ncols`: The number of columns to simulate.
+-   `n_true`: The number of variables truly associated with the outcome.
+-   `amplitude`: The strength of association between true variables and
+    the outcome.
+
+For example, simulating a 5 row dataset, with 5 explanatory variables,
+where 2 variables are truly associated with the outcome with a signal
+strength of 8 would be conducted using the code below. Note that the
+variables simulated to be truly associated with the outcome are labeled
+as “true\_”, and variables that are randomly generated labeled as
+“junk\_”.
+
+``` r
+simulate_data(nrows=5, 
+              ncols=5,
+              n_true=2,
+              amplitude=8)
+#>     outcome    junk_V1    true_V2    true_V3    junk_V4     junk_V5
+#> 1  0.221365 -1.4714379  0.1265166 -0.2050986 -1.9603030  0.74586529
+#> 2 -4.524082  0.8873447 -0.6569296 -0.4972537  1.0603469  1.03974907
+#> 3 -3.948917  0.4930688 -0.4016229 -0.7191238 -0.7291698 -0.79151647
+#> 4 -2.617451 -0.2217698 -0.6222874 -0.1586967  0.9645390 -0.03753633
+#> 5  4.613613  0.1590784 -0.3425437  1.6222826  1.4840578  0.15464136
+```
+
+It can also be interesting to simulate datasets with no variables
+associated with the outcome (other than by chance). This can be done by
+setting `n_true` to zero (or leaving to the default of zero).
+
+``` r
+simulate_data(nrows=5, 
+              ncols=5,
+              n_true=0)
+#>      outcome    junk_V1     junk_V2    junk_V3     junk_V4     junk_V5
+#> 1  2.2007843 -0.8401319 -1.52055028 -1.1568187  1.94737237 -0.12843586
+#> 2 -0.1496611  0.7128174  0.50553131  0.8950869  0.02989857 -0.51574352
+#> 3 -0.9676750  1.2115235  0.88489231  0.6895640 -0.39529438 -0.16517106
+#> 4  0.3468111  1.3880437 -0.31587319  1.2727221  0.29985638  0.06233299
+#> 5 -0.9533052 -1.0614021  0.09315892 -0.4079483 -0.17326474 -0.98466363
+```
+
+By using simulated datasets with no signal other than by chance, it is
+possible to explore various modeling approaches to determine how many
+false positive variables might be selected with a given approach.
 
 ## References
 
