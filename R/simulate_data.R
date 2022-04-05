@@ -1,6 +1,6 @@
-#' simulate
+#' simulate_data
 #'
-#' @name simulate
+#' @name simulate_data
 #'
 #' @description Simulate a dataset. This can optionally include variables with a given associated with the outcome.
 #'
@@ -15,7 +15,7 @@
 #'
 #' @export
 
-simulate <- function(nrows, ncols, n_true = 0, amplitude = 0) {
+simulate_data <- function(nrows, ncols, n_true = 0, amplitude = 0) {
   # Generate the variables from a multivariate normal distribution
   mu <- rep(0, ncols)
   rho <- 0.25
