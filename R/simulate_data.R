@@ -12,6 +12,7 @@
 #' @return A simulated dataset
 #'
 #' @import dplyr
+#' @importFrom stats rnorm toeplitz
 #'
 #' @export
 
