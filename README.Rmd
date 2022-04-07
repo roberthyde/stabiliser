@@ -146,7 +146,7 @@ triangulated$combi$stability %>%
 
 To determine the optimum statistical approach, it can be useful to simulate datasets that are simular to those being explored within a research project, but with known outcomes. 
 
-The \pkg{stabiliser} package includes a `simulate_data()` function, which allows the user to simulate a dataset as follows:
+The \pkg{stabiliser} package includes a `simulate_data()` function using code adapted from the \pkg{knockoff} package, which allows the user to simulate a dataset as follows:
 
 * `nrows`: the number of rows to simulate.
 * `ncols`: The number of columns to simulate.
