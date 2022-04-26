@@ -19,6 +19,12 @@
 \item{type}{The type of model, either "linear" or "logistic"}
 
 \item{quantile}{The quantile of null stabilities to use as a threshold.}
+
+\item{normalise}{Normalise numeric variables (TRUE/FALSE)}
+
+\item{dummy}{Create dummy variables for factors/characters (TRUE/FALSE)}
+
+\item{impute}{Impute missing data (TRUE/FALSE)}
 }
 \value{
 A list for each model selected. Each list contains a dataframe of variable stabilities, a numeric permutation threshold, and a dataframe of coefficients for both bootstrap and permutation.

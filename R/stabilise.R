@@ -12,6 +12,9 @@
 #' @param models The models to select for stabilising. Default is elastic net (models = c("enet")), other available models include "lasso", "mbic", "mcp".
 #' @param type The type of model, either "linear" or "logistic"
 #' @param quantile The quantile of null stabilities to use as a threshold.
+#' @param normalise Normalise numeric variables (TRUE/FALSE)
+#' @param dummy Create dummy variables for factors/characters (TRUE/FALSE)
+#' @param impute Impute missing data (TRUE/FALSE)
 #'
 #'
 #' @return A list for each model selected. Each list contains a dataframe of variable stabilities, a numeric permutation threshold, and a dataframe of coefficients for both bootstrap and permutation.
@@ -24,7 +27,11 @@
 #'
 utils::globalVariables(c("models"))
 
-stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", perm_boot_reps = 20, models = c("enet"), type = "linear", quantile = 1) {
+stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
+                      models = c("enet"), type = "linear", quantile = 1, normalise = TRUE, dummy = TRUE, impute = TRUE) {
+
+  data <- prep_data(data = data, outcome = outcome, normalise = normalise, dummy = dummy, impute = impute)
+
   boot_reps <- rep_selector_boot(data = data, boot_reps = boot_reps)
   permutations <- rep_selector_perm(data = data, permutations = permutations)
 
