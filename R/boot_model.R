@@ -28,7 +28,13 @@ boot_model <- function(data, outcome, selected_model, type) {
     map_df(.x = .$splits, .f = ~ as.data.frame(.) %>% selected_model(., outcome = outcome, type = type), .id = "bootstrap")
 }
 
-boot_summarise <- function(booted_obj, data, boot_reps) {
+boot_summarise <- function(booted_obj, data, outcome, boot_reps) {
+  variable_names <- data %>%
+    select(-outcome)
+
+  variables <- tibble(variable = colnames(variable_names))
+
+
   booted_obj %>%
     group_by(variable) %>%
     summarise(
@@ -43,7 +49,7 @@ boot_summarise <- function(booted_obj, data, boot_reps) {
       stability = (n() / boot_reps) * 100
     ) %>%
     select(-prop_one_side) %>%
-    right_join(tibble(variable = colnames(data)), by = "variable") %>%
+    right_join(variables, by = "variable") %>%
     replace_na(list(
       stability = 0
     )) %>%

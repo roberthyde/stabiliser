@@ -146,7 +146,7 @@ triangulated$combi$stability %>%
 
 To determine the optimum statistical approach, it can be useful to simulate datasets that are simular to those being explored within a research project, but with known outcomes. 
 
-The \pkg{stabiliser} package includes a `simulate_data()` function using code adapted from the \pkg{knockoff} package, which allows the user to simulate a dataset as follows:
+The \pkg{stabiliser} package includes a `simulate_data()` function using code adapted from the \pkg{knockoff} package (Barber and Candès, 2015), which allows the user to simulate a dataset as follows:
 
 * `nrows`: the number of rows to simulate.
 * `ncols`: The number of columns to simulate.
@@ -176,3 +176,5 @@ By using simulated datasets with no signal other than by chance, it is possible 
 Lima, E., Hyde, R., Green, M., 2021. Model selection for inferential models with high dimensional data: synthesis and graphical representation of multiple techniques. Sci. Rep. 11, 412. https://doi.org/10.1038/s41598-020-79317-8
 
 Meinshausen, N., Buhlmann, P., 2010. Stability selection. J. R. Stat. Soc. Ser. B (Statistical Methodol. 72, 417–473. https://doi.org/10.1111/j.1467-9868.2010.00740.x
+
+Barber, R.F., Candès, E.J., 2015. Controlling the false discovery rate via knockoffs. https://doi.org/10.1214/15-AOS1337 43, 2055–2085. https://doi.org/10.1214/15-AOS1337

@@ -35,7 +35,7 @@ perm_model <- function(perm_data, data, outcome, perm_boot_reps, selected_model,
     nest() %>%
     rename(perm_data = data) %>%
     map_df(.x = .$perm_data, .f = ~ as.data.frame(.) %>%
-      boot_summarise(booted_obj = ., data = data, boot_reps = perm_boot_reps), .id = "permutation")
+      boot_summarise(booted_obj = ., data = data, outcome = outcome, boot_reps = perm_boot_reps), .id = "permutation")
 }
 
 perm_summarise <- function(permed_object, quantile) {
