@@ -14,23 +14,33 @@
 #'
 #'
 
-prep_data <- function(outcome, data, normalise, dummy, impute){
+prep_data <- function(outcome, data, normalise, dummy, impute) {
   message("Prepping...")
 
   f <- formula(paste0(enquo(outcome), " ~ ."))
 
   recipe <- data %>%
-    recipe(f, data=.)
+    recipe(f, data = .) %>%
+    update_role(outcome,
+      new_role = "outcome"
+    )
 
   if (normalise == TRUE) {
     recipe <- recipe %>%
-      step_normalize(all_numeric())
+      step_normalize(all_numeric_predictors())
   }
 
   if (dummy == TRUE) {
     recipe <- recipe %>%
-      step_dummy(all_nominal())
+      step_dummy(all_nominal_predictors())
   }
+
+  if (impute == TRUE) {
+    recipe <- recipe %>%
+      step_impute_knn(all_predictors())
+  }
+
+  print(recipe)
 
   data_prepped <- recipe %>%
     prep() %>%
