@@ -30,9 +30,9 @@ simulate_data <- function(nrows, ncols, n_true = 2, amplitude = 2,
   fixed_effect_level_2 <- data.frame(replicate(n_level_2, rep(rnorm(nlev2, 0, 1), each = n_level_2))) # gives a RE to each level 2
 
   ## JOIN FIXED EFFECTS TOGETHER ##
-  data_sim_y <- as.data.frame(cbind(uncor_sd_true, fixed_effect_level_2))
-  colnames(data_sim_y) <- c(1:ncol(data_sim_y))
-  data_sim_y <- data_sim_y  %>%
+  outcome <- as.data.frame(cbind(uncor_sd_true, fixed_effect_level_2))
+  colnames(outcome) <- c(1:ncol(outcome))
+  outcome <- outcome  %>%
     rename_with(~ paste0("true_", .))
 
   ## ADD RANDOM EFFECTS
@@ -41,15 +41,15 @@ simulate_data <- function(nrows, ncols, n_true = 2, amplitude = 2,
   rand_eff_rows <- rep(rand_eff, each = n_level_2) # gives a RE to each level 2
 
   #### NOW CALCULATE THE Y VARIABLES FROM A MODEL DEPENDENT ONLY ON THIS SET OF 10 VARIABLES AND WITH SOME RANDOM ERROR ADDED
-  data_sim_y$error <- rnorm(nrows, 0, sd_level_1) ## A VECTOR OF ERROR TERMS RANDOMLY SELECTED FROM A RANDOM DISTRIBUTION MEAN = 0 SD = 5
-  data_sim_y$RE <- (rand_eff_rows)
+  outcome$error <- rnorm(nrows, 0, sd_level_1) ## A VECTOR OF ERROR TERMS RANDOMLY SELECTED FROM A RANDOM DISTRIBUTION MEAN = 0 SD = 5
+  outcome$RE <- (rand_eff_rows)
 
   ### THIS CODE CALCULATES A Y VALUE FOR EACH ROW FROM OUR 10 X VARIABLES WITH AN INTERCEPT = 1 AND TH EADDITION OF THE RANDON ERROR TERM
   ## SO THIS EFFECTIVELY PREDICTS THE Y FROM A MODEL USING OUR 10 VARIABLES AND A BETA=2 FOR EACH VARIABLE
 
-  data_sim_y$y_out <- 0 + (data_sim_y$true_1 * amplitude) + (data_sim_y$true_2 * amplitude) + data_sim_y$RE + data_sim_y$error
+  outcome$y_out <- 0 + (outcome$true_1 * amplitude) + (outcome$true_2 * amplitude) + outcome$RE + outcome$error
 
-  data_sim_y <- data_sim_y %>% dplyr::select(-error, -RE)
+  outcome <- outcome %>% dplyr::select(-error, -RE)
 
   df_rand <- data.frame(Doubles = double())
   for (i in 1:nlev2) {
@@ -57,29 +57,17 @@ simulate_data <- function(nrows, ncols, n_true = 2, amplitude = 2,
     df_rand <- as.data.frame(rbind(c(df_rand, randoms)))
   }
 
-  data_sim_y$level2 <- unlist(t(df_rand[-1]))
+  outcome$level2 <- unlist(t(df_rand[-1]))
+
+  outcome <- outcome %>%
+    select(y_out, level2, everything())
 
   ## Add noise variables
-  noise_vars <- data.frame(replicate(num_noise_vars, rnorm(nrows, 0, 1)))
+  noise_vars <- replicate(num_noise_vars, rnorm(nrows, 0, 1)) %>%
+    as_tibble() %>%
+    rename_with(~ paste0("junk_", .x))
 
-  data_all <- cbind(data_sim_y, noise_vars)
-
-  suppressWarnings(mod_sim_RE_test <- lmer(y_out ~ true_1 + true_2 + (1 | level2), data = data_all[, 1:10]))
-
-  true_out <- summary(mod_sim_RE_test)
-
-  coefs <- as.data.frame(true_out$coefficients)
-  min_x_coef_t <- min(abs(coefs$`t value`[2:nrow(coefs)]))
-
-  sds <- as.data.frame(true_out$varcor)
-  level_1_sd <- round(sds$sdcor[2], 2)
-  level_2_sd <- round(sds$sdcor[1], 2)
-
-  data_to_use <- data_all
-
-  x_names <- data_to_use %>% dplyr::select(-y_out, -level2) ## ALTER IF DIFFERENT LEVELS INVOLVED
-
-  return(data_to_use)
+  return(as.data.frame(cbind(outcome, noise_vars)))
 }
 
 simulate_data(
