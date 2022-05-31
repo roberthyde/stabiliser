@@ -7,7 +7,7 @@
 #' @param sd_level_1 Standard deviation of level 1 variables
 #' @param sd_level_2 Standard deviation of level 2 variables
 #'
-#' @return A simulated dataset
+#' @return A simulated dataset with a clustered outcome sutable for random effects analysis
 #'
 #' @import dplyr
 #' @importFrom stats rnorm
