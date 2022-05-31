@@ -3,9 +3,6 @@
 \name{simulate_data_re}
 \alias{simulate_data_re}
 \title{simulate_data_re}
-\usage{
-simulate_data_re(sd_level_1 = 2, sd_level_2 = 2)
-}
 \arguments{
 \item{sd_level_1}{Standard deviation of level 1 variables}
 
@@ -15,5 +12,5 @@ simulate_data_re(sd_level_1 = 2, sd_level_2 = 2)
 A simulated dataset
 }
 \description{
-Simulate a 500x500 dataset with random effects. This can optionally include variables with a given associated with the outcome.
+Simulate a 500x500 dataset with 8 true fixed effects, 492 junk variables and a clustered outcome suitable for a 2 level random effects analysis. The strength of association between true variables and the outcome is governed by the error added at level 1 (defined by parameter sd_level_1) and level 2 (sd_level_2).
 }

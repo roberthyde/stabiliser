@@ -42,5 +42,10 @@ Imports:
     broom,
     caret,
     ncvreg,
-    knitr
+    knitr,
+    Hmisc,
+    expss,
+    lme4,
+    matrixStats,
+    recipes
 VignetteBuilder: knitr

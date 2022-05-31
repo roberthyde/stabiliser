@@ -4,15 +4,7 @@
 \alias{simulate_data}
 \title{simulate_data}
 \usage{
-simulate_data(
-  nrows,
-  ncols,
-  n_true = 2,
-  amplitude = 2,
-  n_level_2 = 2,
-  sd_level_1 = 0.5,
-  sd_level_2 = 0
-)
+simulate_data(nrows, ncols, n_true = 0, amplitude = 0)
 }
 \arguments{
 \item{nrows}{The number of rows to simulate.}

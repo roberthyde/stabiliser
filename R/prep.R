@@ -14,6 +14,8 @@
 #'
 #'
 
+utils::globalVariables(c("formula"))
+
 prep_data <- function(outcome, data, normalise, dummy, impute) {
   message("Prepping...")
 

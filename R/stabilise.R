@@ -29,6 +29,7 @@ utils::globalVariables(c("models"))
 
 stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
                       models = c("enet"), type = "linear", quantile = 1, normalise = TRUE, dummy = TRUE, impute = TRUE) {
+
   data <- prep_data(data = data, outcome = outcome, normalise = normalise, dummy = dummy, impute = impute)
 
   boot_reps <- rep_selector_boot(data = data, boot_reps = boot_reps)

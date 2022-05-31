@@ -2,7 +2,7 @@
 #'
 #' @name simulate_data_re
 #'
-#' @description Simulate a 500x500 dataset with random effects. This can optionally include variables with a given associated with the outcome.
+#' @description Simulate a 500x500 dataset with 8 true fixed effects, 492 junk variables and a clustered outcome suitable for a 2 level random effects analysis. The strength of association between true variables and the outcome is governed by the error added at level 1 (defined by parameter sd_level_1) and level 2 (sd_level_2).
 #'
 #' @param sd_level_1 Standard deviation of level 1 variables
 #' @param sd_level_2 Standard deviation of level 2 variables
@@ -13,6 +13,9 @@
 #' @importFrom stats rnorm
 #'
 #' @export
+#'
+
+utils::globalVariables(c("error", "RE", "level2"))
 
 simulate_data_re <- function(sd_level_1 = 2, sd_level_2 = 2) {
 
@@ -30,14 +33,9 @@ simulate_data_re <- function(sd_level_1 = 2, sd_level_2 = 2) {
   nlev2 <- nrows / n_level_2
   num_noise_vars = nrows - n_true
 
-  ## FIXED EFFECTS AT LEVEL 1
-  fixed_effect_level_1 <- data.frame(replicate(n_true / 2, rnorm(nrows, 0, 1)))
-
-  ## FIXED EFFECTS AT LEVEL 2
-  fixed_effect_level_2 <- data.frame(replicate(n_true / 2, rep(rnorm(nlev2, 0, 1), each = n_level_2)))
-
-  ## JOIN FIXED EFFECTS TOGETHER ##
-  outcome <- bind_cols(c(fixed_effect_level_1, fixed_effect_level_2))
+  # Fixed effects at level 1 and 2
+  outcome <-  data.frame(replicate(n_true / 2, rnorm(nrows, 0, 1)),
+                      replicate(n_true / 2, rep(rnorm(nlev2, 0, 1), each = n_level_2)))
 
   colnames(outcome) <- c(1:ncol(outcome))
   outcome <- outcome  %>%
@@ -67,7 +65,9 @@ simulate_data_re <- function(sd_level_1 = 2, sd_level_2 = 2) {
     outcome$RE +
     outcome$error
 
-  outcome <- outcome %>% dplyr::select(-error, -RE)
+  outcome <- outcome %>%
+    as_tibble() %>%
+    select(-error, -RE)
 
   df_rand <- data.frame(Doubles = double())
   for (i in 1:nlev2) {
@@ -82,8 +82,12 @@ simulate_data_re <- function(sd_level_1 = 2, sd_level_2 = 2) {
 
   ## Add noise variables
   noise_vars <- replicate(num_noise_vars, rnorm(nrows, 0, 1)) %>%
+    as.data.frame() %>%
     as_tibble() %>%
     rename_with(~ paste0("junk_", .x))
 
-  return(as_tibble(cbind(outcome, noise_vars)))
+  out <- outcome %>%
+    bind_cols(noise_vars)
+
+  return(out)
 }

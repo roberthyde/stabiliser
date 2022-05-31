@@ -2,11 +2,7 @@
 % Please edit documentation in R/prep.R
 \name{stabiliser_prep}
 \alias{stabiliser_prep}
-\alias{prep_data}
 \title{stabiliser_prep}
-\usage{
-prep_data(outcome, data, normalise, dummy, impute)
-}
 \arguments{
 \item{normalise}{Normalise numeric variables (TRUE/FALSE)}
 
