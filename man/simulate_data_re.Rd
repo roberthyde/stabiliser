@@ -2,31 +2,18 @@
 % Please edit documentation in R/simulate_data_re.R
 \name{simulate_data_re}
 \alias{simulate_data_re}
-\alias{simulate_data}
 \title{simulate_data_re}
 \usage{
-simulate_data(
-  nrows,
-  ncols,
-  n_true = 2,
-  amplitude = 2,
-  n_level_2 = 2,
-  sd_level_1 = 0.5,
-  sd_level_2 = 0
-)
+simulate_data_re(sd_level_1 = 2, sd_level_2 = 2)
 }
 \arguments{
-\item{nrows}{The number of rows to simulate.}
+\item{sd_level_1}{Standard deviation of level 1 variables}
 
-\item{ncols}{The number of columns to simulate.}
-
-\item{n_true}{The number of variables truly associated with the outcome.}
-
-\item{amplitude}{The strength of association between true variables and the outcome.}
+\item{sd_level_2}{Standard deviation of level 2 variables}
 }
 \value{
 A simulated dataset
 }
 \description{
-Simulate a dataset with random effects. This can optionally include variables with a given associated with the outcome.
+Simulate a 500x500 dataset with random effects. This can optionally include variables with a given associated with the outcome.
 }
