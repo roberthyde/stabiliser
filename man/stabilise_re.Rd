@@ -18,12 +18,6 @@
 
 \item{perm_boot_reps}{The number of times to repeat each set of permutations. Default is 5.}
 
-\item{models}{The models to select for stabilising. Default is elastic net (models = c("enet")), other available models include "lasso", "mbic", "mcp".}
-
-\item{type}{The type of model, either "linear" or "logistic"}
-
-\item{quantile}{The quantile of null stabilities to use as a threshold.}
-
 \item{normalise}{Normalise numeric variables (TRUE/FALSE)}
 
 \item{dummy}{Create dummy variables for factors/characters (TRUE/FALSE)}
