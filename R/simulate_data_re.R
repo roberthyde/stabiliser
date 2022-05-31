@@ -12,12 +12,11 @@
 #' @return A simulated dataset
 #'
 #' @import dplyr
-#' @import lme4
-#' @importFrom stats rnorm toeplitz
+#' @importFrom stats rnorm
 #'
 #' @export
 
-simulate_data <- function(nrows, ncols, n_true = 2, amplitude = 2,
+simulate_data_re <- function(nrows, ncols, n_true = 2, amplitude = 2,
                           n_level_2 = 2, sd_level_1 = 0.5, sd_level_2 = 0) {
   # nlev2 must be positive integer
   # n_true must be positive integer
@@ -69,8 +68,3 @@ simulate_data <- function(nrows, ncols, n_true = 2, amplitude = 2,
 
   return(as.data.frame(cbind(outcome, noise_vars)))
 }
-
-simulate_data(
-  nrows = 10, ncols = 10, n_true = 2, amplitude = 2,
-  n_level_2 = 2, sd_level_1 = 0.5, sd_level_2 = 0
-)
