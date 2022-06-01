@@ -9,12 +9,21 @@
 #' @param impute Impute missing data (TRUE/FALSE)
 #'
 #' @keywords internal
-#' @import recipes
+#' @importFrom recipes recipe
+#' @importFrom recipes update_role
+#' @importFrom recipes step_normalize
+#' @importFrom recipes step_dummy
+#' @importFrom recipes step_impute_knn
+#' @importFrom recipes prep
+#' @importFrom recipes juice
 #' @import dplyr
 #'
 #'
 
-utils::globalVariables(c("formula"))
+utils::globalVariables(c(
+  "formula", "all_numeric_predictors", "all_nominal_predictors",
+  "all_predictors"
+))
 
 prep_data <- function(outcome, data, normalise, dummy, impute) {
   message("Prepping...")

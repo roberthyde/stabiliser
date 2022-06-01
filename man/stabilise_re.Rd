@@ -16,7 +16,7 @@
 
 \item{permutations}{The number of times to be permuted per repeat. Default is "auto" which selects number based on dataframe size.}
 
-\item{perm_boot_reps}{The number of times to repeat each set of permutations. Default is 5.}
+\item{perm_boot_reps}{The number of times to repeat each set of permutations. Default is 20.}
 
 \item{normalise}{Normalise numeric variables (TRUE/FALSE)}
 

@@ -47,5 +47,6 @@ Imports:
     expss,
     lme4,
     matrixStats,
-    recipes
+    recipes,
+    lmerTest
 VignetteBuilder: knitr

@@ -8,7 +8,7 @@
 #' @param outcome The outcome as a string (i.e. "y").
 #' @param boot_reps The number of bootstrap samples. Default is "auto" which selects number based on dataframe size.
 #' @param permutations The number of times to be permuted per repeat. Default is "auto" which selects number based on dataframe size.
-#' @param perm_boot_reps The number of times to repeat each set of permutations. Default is 5.
+#' @param perm_boot_reps The number of times to repeat each set of permutations. Default is 20.
 #' @param models The models to select for stabilising. Default is elastic net (models = c("enet")), other available models include "lasso", "mbic", "mcp".
 #' @param type The type of model, either "linear" or "logistic"
 #' @param quantile The quantile of null stabilities to use as a threshold.
@@ -29,7 +29,6 @@ utils::globalVariables(c("models"))
 
 stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
                       models = c("enet"), type = "linear", quantile = 1, normalise = TRUE, dummy = TRUE, impute = TRUE) {
-
   data <- prep_data(data = data, outcome = outcome, normalise = normalise, dummy = dummy, impute = impute)
 
   boot_reps <- rep_selector_boot(data = data, boot_reps = boot_reps)

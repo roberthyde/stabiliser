@@ -18,27 +18,28 @@
 utils::globalVariables(c("error", "RE", "level2"))
 
 simulate_data_re <- function(sd_level_1 = 2, sd_level_2 = 2) {
-
-  if (sd_level_1 < 0.5 | sd_level_1 > 6 | sd_level_2 < 0.5 | sd_level_2 > 6){
+  if (sd_level_1 < 0.5 | sd_level_1 > 6 | sd_level_2 < 0.5 | sd_level_2 > 6) {
     stop("For data simulation with random effects, both sd_level_1 and sd_level_2 must be set between 0.5-6.")
   }
 
   # TODO: User editable function
-  nrows = 500
-  ncols = 500
-  n_true = 8
-  amplitude = 2
-  n_level_2 = 5
+  nrows <- 500
+  ncols <- 500
+  n_true <- 8
+  amplitude <- 2
+  n_level_2 <- 5
 
   nlev2 <- nrows / n_level_2
-  num_noise_vars = nrows - n_true
+  num_noise_vars <- nrows - n_true
 
   # Fixed effects at level 1 and 2
-  outcome <-  data.frame(replicate(n_true / 2, rnorm(nrows, 0, 1)),
-                      replicate(n_true / 2, rep(rnorm(nlev2, 0, 1), each = n_level_2)))
+  outcome <- data.frame(
+    replicate(n_true / 2, rnorm(nrows, 0, 1)),
+    replicate(n_true / 2, rep(rnorm(nlev2, 0, 1), each = n_level_2))
+  )
 
   colnames(outcome) <- c(1:ncol(outcome))
-  outcome <- outcome  %>%
+  outcome <- outcome %>%
     rename_with(~ paste0("true_", .))
 
   ## ADD RANDOM EFFECTS

@@ -10,7 +10,7 @@
 #' @param n_top_filter The number of variables to filter for final model (Default = 50).
 #' @param boot_reps The number of bootstrap samples. Default is "auto" which selects number based on dataframe size.
 #' @param permutations The number of times to be permuted per repeat. Default is "auto" which selects number based on dataframe size.
-#' @param perm_boot_reps The number of times to repeat each set of permutations. Default is 5.
+#' @param perm_boot_reps The number of times to repeat each set of permutations. Default is 20.
 #' @param normalise Normalise numeric variables (TRUE/FALSE)
 #' @param dummy Create dummy variables for factors/characters (TRUE/FALSE)
 #' @param impute Impute missing data (TRUE/FALSE)
@@ -20,7 +20,7 @@
 #'
 #' @import rsample
 #' @import dplyr
-#' @import lme4
+#' @importFrom lme4 lmer
 #' @importFrom expss gt
 #' @importFrom expss lt
 #' @importFrom expss neq
@@ -37,7 +37,6 @@ utils::globalVariables(c("models", "in_model", "mean_coefficient", "ci_lower", "
 stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
                          boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
                          normalise = TRUE, dummy = TRUE, impute = TRUE) {
-
   boot_reps <- rep_selector_boot(data = data, boot_reps = boot_reps)
   permutations <- rep_selector_perm(data = data, permutations = permutations)
 
@@ -72,7 +71,11 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
   colnames(df_cor1_func)[1] <- "r"
   colnames(df_cor1_func)[2] <- "p"
   for (i in 1:(ncol(x_names))) {
-    x_cor <- as.data.frame(cbind(df$outcome, x_names[, i]))
+    x_cor <- df %>%
+      select(outcome) %>%
+      bind_cols(x_names[, i]) %>%
+      as.data.frame()
+
     colnames(x_cor)[1:2] <- c("outcome", "xi")
     rcor_10 <- rcorr(as.matrix(x_cor), type = "pearson")
     r <- rcor_10$r[1, 2]
@@ -193,12 +196,11 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
 
   # Permutation
   data_to_use <- df
-  data_to_use$outcome <- sample(data_to_use$outcome)
+  data_to_use$outcome <- sample(data_to_use$outcome) # TODO: Inside permutations loop?
 
   table_stabil_means_PERM_multi <- as.data.frame(colnames(x_names))
   colnames(table_stabil_means_PERM_multi)[1] <- "variable"
   for (i in 1:permutations) {
-
     stab_df_coefs_PERM <- as.data.frame(colnames(x_names))
     colnames(stab_df_coefs_PERM)[1] <- "variable"
     stab_df_stabil_PERM <- as.data.frame(colnames(x_names))
@@ -212,8 +214,9 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
     colnames(df_cor1_func)[1] <- "r"
     colnames(df_cor1_func)[2] <- "p"
     for (j in 1:(ncol(x_names))) {
-      x_cor <- as.data.frame(cbind(data_to_use$outcome, x_names[, i]))
-      colnames(x_cor)[1:2] <- c("outcome", "xi")
+      x_cor <- data_to_use %>%
+        select(outcome) %>%
+        bind_cols(x_names[, i])
       rcor_10 <- rcorr(as.matrix(x_cor), type = "pearson")
       r <- rcor_10$r[1, 2]
       p <- rcor_10$P[1, 2]
@@ -341,4 +344,3 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
   message("Done")
   return(list_out)
 }
-
