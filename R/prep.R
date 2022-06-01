@@ -14,6 +14,9 @@
 #' @importFrom recipes step_normalize
 #' @importFrom recipes step_dummy
 #' @importFrom recipes step_impute_knn
+#' @importFrom recipes all_numeric_predictors
+#' @importFrom recipes all_nominal_predictors
+#' @importFrom recipes all_predictors
 #' @importFrom recipes prep
 #' @importFrom recipes juice
 #' @import dplyr
