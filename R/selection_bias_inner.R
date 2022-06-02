@@ -12,6 +12,7 @@
 #'
 #' @return A list including a dataframe of results, a dataframe of the median number of variables selected and a plot illustrating false positive selection.
 #'
+#' @keywords internal
 #' @import dplyr
 #' @import purrr
 #' @importFrom  Hmisc rcorr

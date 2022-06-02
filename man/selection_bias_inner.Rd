@@ -18,3 +18,4 @@ An function to illustrate the risk of selection bias in
 conventional modelling approaches by simulating a dataset with no information and
 conducting conventional modelling with prefiltration.
 }
+\keyword{internal}

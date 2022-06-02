@@ -21,17 +21,14 @@
 #' @import rsample
 #' @import dplyr
 #' @importFrom lme4 lmer
-#' @importFrom expss gt
-#' @importFrom expss lt
-#' @importFrom expss neq
-#' @importFrom expss count_row_if
+#' @importFrom expss gt neq lt count_row_if
 #' @importFrom Hmisc rcorr
 #' @importFrom matrixStats rowQuantiles
 #' @importFrom purrr map
-#' @impotFrom stats formula
 #'
 #' @export
 #'
+
 utils::globalVariables(c("models", "in_model", "mean_coefficient", "ci_lower", "ci_upper", "stable"))
 
 stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
@@ -44,7 +41,7 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
 
   # Prep non level_2 data
   level_data <- data %>%
-    select(level_2_id)
+    select(all_of(level_2_id))
 
   data_for_prep <- data %>%
     select(-level_2_id)
@@ -53,7 +50,6 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
 
   data <- level_data %>%
     bind_cols(data_prepped)
-
 
   message("Filtering data...")
 
@@ -107,13 +103,8 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
     RE_boot <- data_selected[sample(1:nrow(data_selected), nrow(data_selected), replace = TRUE), ]
 
 
-    mod_var_names <- paste(colnames(RE_boot[, 3:ncol(RE_boot)]), sep = "", collapse = "+")
-    mod_var_names <- noquote(mod_var_names)
-    mod_code <- noquote(mod_var_names)
-
-
-    mod_sim_RE_boot <- suppressMessages(lmer(paste0("outcome~", mod_code, rand_names), data = RE_boot))
-
+    mod_code <- paste(colnames(RE_boot[, 3:ncol(RE_boot)]), sep = "", collapse = "+")
+    mod_sim_RE_boot <- suppressMessages(lmer(paste0(outcome, " ~ ", mod_code, rand_names), data = RE_boot))
     mod_sim_RE_out <- summary(mod_sim_RE_boot)
 
     COEFS <- as.data.frame(mod_sim_RE_out$coefficients)
@@ -127,11 +118,9 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
       select(outcome, level_2_id) %>%
       bind_cols(boot_final_mod_data)
 
-    final_mod_var_names <- paste(colnames(boot_final_mod_data_2[, 3:ncol(boot_final_mod_data_2)]), sep = "", collapse = "+")
-    final_mod_var_names <- noquote(final_mod_var_names)
-    final_mod_code <- noquote(final_mod_var_names)
+    final_mod_code <- paste(colnames(boot_final_mod_data_2[, 3:ncol(boot_final_mod_data_2)]), sep = "", collapse = "+")
 
-    final_boot_mod <- suppressMessages(lmer(paste0("outcome~", final_mod_code, rand_names), data = boot_final_mod_data_2))
+    final_boot_mod <- suppressMessages(lmer(paste0(outcome, " ~ ", final_mod_code, rand_names), data = boot_final_mod_data_2))
 
     final_boot_mod_out <- summary(final_boot_mod)
 
@@ -170,8 +159,6 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
 
   percent_counts_in_model_join_4_order <- percent_counts_in_model_join_4[order(-percent_counts_in_model_join_4$percent_in_model), ]
 
-  percent_counts_in_model_join_4_order[1:30, c(1:3, 7)]
-
   stability_boot_RE_model <- percent_counts_in_model_join_4_order
 
   coef_means <- as.data.frame(stability_boot_RE_model$`50%`)
@@ -197,7 +184,17 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
 
   for (i in 1:permutations) {
     data_to_use <- df
-    data_to_use$outcome <- sample(data_to_use$outcome) # TODO: change to user outcome
+
+    outcome_variable <- data_to_use %>%
+      select(all_of(outcome))
+
+    outcome_variable <- outcome_variable[sample(1:nrow(outcome_variable), nrow(outcome_variable), replace = TRUE), ]
+
+    x_variables <- data %>%
+      select(-all_of(outcome))
+
+    data_to_use <- outcome_variable %>%
+      bind_cols(x_variables)
 
     table_stabil_means_PERM_multi <- as.data.frame(colnames(x_names))
 
@@ -243,11 +240,9 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
     for (k in 1:perm_boot_reps) {
       RE_boot <- data_selected[sample(1:nrow(data_selected), nrow(data_selected), replace = TRUE), ]
 
-      mod_var_names <- paste(colnames(RE_boot[, 3:ncol(RE_boot)]), sep = "", collapse = "+")
-      mod_var_names <- noquote(mod_var_names)
-      mod_code <- noquote(mod_var_names)
+      mod_code <- paste(colnames(RE_boot[, 3:ncol(RE_boot)]), sep = "", collapse = "+")
 
-      mod_sim_RE_boot <- suppressMessages(lmer(paste0("outcome~", mod_code, rand_names), data = RE_boot))
+      mod_sim_RE_boot <- suppressMessages(lmer(paste0(outcome, " ~ ", mod_code, rand_names), data = RE_boot))
 
       mod_sim_RE_out <- summary(mod_sim_RE_boot)
 
@@ -322,14 +317,12 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
   selected_to__model <- df %>% select(selected_variables)
 
   selected_to__model2 <- df %>%
-    select(outcome, level_2_id) %>%
+    select(all_of(outcome), level_2_id) %>%
     bind_cols(selected_to__model)
 
-  mod_var_names_sel <- paste(colnames(selected_to__model), sep = "", collapse = "+")
-  mod_var_names_sel <- noquote(mod_var_names_sel)
-  mod_code_sel <- noquote(mod_var_names_sel)
+  mod_code_sel <- paste(colnames(selected_to__model), sep = "", collapse = "+")
 
-  selected_mod <- lmer(paste0("outcome~", mod_code_sel, rand_names), data = selected_to__model2)
+  selected_mod <- lmer(paste0(outcome, " ~ ", mod_code_sel, rand_names), data = selected_to__model2)
 
   selected_mod_out <- summary(selected_mod)
 

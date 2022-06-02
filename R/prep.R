@@ -9,16 +9,7 @@
 #' @param impute Impute missing data (TRUE/FALSE)
 #'
 #' @keywords internal
-#' @importFrom recipes recipe
-#' @importFrom recipes update_role
-#' @importFrom recipes step_normalize
-#' @importFrom recipes step_dummy
-#' @importFrom recipes step_impute_knn
-#' @importFrom recipes all_numeric_predictors
-#' @importFrom recipes all_nominal_predictors
-#' @importFrom recipes all_predictors
-#' @importFrom recipes prep
-#' @importFrom recipes juice
+#' @importFrom recipes recipe update_role step_normalize step_dummy step_impute_knn all_numeric_predictors all_nominal_predictors all_predictors prep juice
 #' @import dplyr
 #'
 #'
@@ -31,7 +22,7 @@ utils::globalVariables(c(
 prep_data <- function(outcome, data, normalise, dummy, impute) {
   message("Prepping...")
 
-  f <- formula(paste0(enquo(outcome), " ~ ."))
+  f <- suppressWarnings(formula(paste0(enquo(outcome), " ~ .")))
 
   recipe <- data %>%
     recipe(f, data = .) %>%
