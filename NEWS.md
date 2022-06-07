@@ -1,9 +1,6 @@
-## stabiliser 0.1.2 
+## stabiliser 1.0.2
 
 ## Major changes
-Introduce "quantile" parameter: The quantile of null stabilities to use as a threshold.
-Streamline lasso to mirror elastic net. 
+Now adding function for both the simulation, and analysis of clustered dataset structure with the functions simulate_data_re() and stabilise_re().
 
 ## Bug fixes
-Lasso stability * now working with perm_thresh == 100
-Lasso stability table output now functioning as elastic net. 
