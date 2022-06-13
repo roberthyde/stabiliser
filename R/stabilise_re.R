@@ -335,7 +335,11 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
     select(-in_model) %>%
     select(variable, mean_coefficient, ci_lower, ci_upper, stability, stable)
 
-  list_out <- list("lmer" = list("stability" = stability, "perm_thresh" = perm_thresh))
+  variable_names <- data %>%
+    select(-outcome) %>%
+    colnames()
+
+  list_out <- list("lmer" = list("stability" = stability, "perm_thresh" = perm_thresh, "variable_names" = variable_names))
   message("Done")
   return(list_out)
 }

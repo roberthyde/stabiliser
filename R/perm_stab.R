@@ -30,7 +30,10 @@ perm_stab <- function(data, boot_data, perm_data, outcome, boot_reps, permutatio
         nest() %>%
         rename(variables = data),
       "perm_thresh" = perm_thresh,
-      "perm_coefs" = perm_coefs
+      "perm_coefs" = perm_coefs,
+      "variable_names" = data %>%
+        select(-outcome) %>%
+        colnames()
     )
   })
 }
