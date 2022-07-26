@@ -44,7 +44,10 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
     select(all_of(level_2_id))
 
   data_for_prep <- data %>%
-    select(-level_2_id)
+    select(-all_of(level_2_id))
+
+  print("data")
+  print(data_for_prep)
 
   data_prepped <- prep_data(data = data_for_prep, outcome = outcome, normalise = normalise, dummy = dummy, impute = impute)
 
@@ -55,12 +58,17 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
 
   # Filter
   x_names <- data %>%
-    select(-outcome, -level_2_id)
+    select(-outcome, -all_of(level_2_id))
 
   df_re_model <- as.data.frame(colnames(x_names))
   colnames(df_re_model)[1] <- "variable"
-  print(level_2_id)
-  rand_names <- paste0("+ (1|", level_2_id, ")")
+
+  rand_names <- paste0("")
+
+  for (level_name in level_2_id) {
+    rand_names <- paste0(rand_names, "+ (1|", level_name, ")")
+  }
+
   df <- data
 
   df_cor1_func <- as.data.frame(matrix(0, ncol = 2, nrow = 1))
@@ -102,17 +110,23 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
   for (i in 1:boot_reps) {
     RE_boot <- data_selected[sample(1:nrow(data_selected), nrow(data_selected), replace = TRUE), ]
 
+    x_names_filtered <- RE_boot %>%
+      select(-all_of(outcome),
+             -all_of(level_2_id))
 
-    mod_code <- paste(colnames(RE_boot[, 3:ncol(RE_boot)]), sep = "", collapse = "+")
+    mod_code <- paste(colnames(x_names_filtered), sep = "", collapse = " + ")
+    print("Mod code")
+    print(paste0(outcome, " ~ ", mod_code, rand_names))
+    print(RE_boot)
     mod_sim_RE_boot <- suppressMessages(lmer(paste0(outcome, " ~ ", mod_code, rand_names), data = RE_boot))
     mod_sim_RE_out <- summary(mod_sim_RE_boot)
 
     COEFS <- as.data.frame(mod_sim_RE_out$coefficients)
     COEFS$variable <- rownames(COEFS)
-    selected_no_intercept <- COEFS %>% filter(variable != "(Intercept)")
+    selected_no_intercept <- COEFS %>%
+      filter(variable != "(Intercept)")
 
     selected <- selected_no_intercept %>% filter(selected_no_intercept$`t value` > 2 | selected_no_intercept$`t value` < -2)
-
     boot_final_mod_data <- RE_boot[, selected$variable]
     boot_final_mod_data_2 <- RE_boot %>%
       select(outcome, level_2_id) %>%
