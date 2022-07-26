@@ -46,9 +46,6 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
   data_for_prep <- data %>%
     select(-all_of(level_2_id))
 
-  print("data")
-  print(data_for_prep)
-
   data_prepped <- prep_data(data = data_for_prep, outcome = outcome, normalise = normalise, dummy = dummy, impute = impute)
 
   data <- level_data %>%
