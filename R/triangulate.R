@@ -29,7 +29,7 @@ triangulate <- function(object, quantile = 1) {
   boot_reps <- nrow(object[[1]]$boot_coefs) * number_models
 
   stability <- map_df(object, ~ .x$boot_coefs, .id = "model") %>%
-    unnest(cols=variables) %>%
+    unnest(cols = variables) %>%
     group_by(variable) %>%
     summarise(
       mean_coefficient = mean(estimate, na.rm = TRUE),

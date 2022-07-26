@@ -111,13 +111,12 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
     RE_boot <- data_selected[sample(1:nrow(data_selected), nrow(data_selected), replace = TRUE), ]
 
     x_names_filtered <- RE_boot %>%
-      select(-all_of(outcome),
-             -all_of(level_2_id))
+      select(
+        -all_of(outcome),
+        -all_of(level_2_id)
+      )
 
     mod_code <- paste(colnames(x_names_filtered), sep = "", collapse = " + ")
-    print("Mod code")
-    print(paste0(outcome, " ~ ", mod_code, rand_names))
-    print(RE_boot)
     mod_sim_RE_boot <- suppressMessages(lmer(paste0(outcome, " ~ ", mod_code, rand_names), data = RE_boot))
     mod_sim_RE_out <- summary(mod_sim_RE_boot)
 
