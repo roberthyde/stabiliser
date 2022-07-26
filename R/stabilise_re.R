@@ -59,7 +59,7 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
 
   df_re_model <- as.data.frame(colnames(x_names))
   colnames(df_re_model)[1] <- "variable"
-
+  print(level_2_id)
   rand_names <- paste0("+ (1|", level_2_id, ")")
   df <- data
 
@@ -309,7 +309,7 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
     max_stab_df <- rbind(max_stab_df, max_stab)
   }
 
-  perm_thresh <- mean(max_stab_df) - 0.01
+  perm_thresh <- mean(max_stab_df)
   table_stabil_means$in_model <- ifelse(table_stabil_means$stability > perm_thresh, 1, 0)
   coefs_in_model <- as.data.frame(full_join(table_stabil_means, coef_means, by = "variable"))
   in_model_selected <- table_stabil_means %>% filter(in_model == 1)
