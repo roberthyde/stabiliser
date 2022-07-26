@@ -24,12 +24,29 @@ triangulate <- function(object, quantile = 1) {
     summarise(stability = mean(stability, na.rm = TRUE)) %>%
     perm_summarise(permed_object = ., quantile = quantile)
 
-  stability <- map_df(object, ~ .x$stability, .id = "model") %>%
+  variables <- tibble(variable = object[[1]]$variable_names)
+  number_models <- length(object)
+  boot_reps <- nrow(object[[1]]$boot_coefs) * number_models
+
+  stability <- map_df(object, ~ .x$boot_coefs, .id = "model") %>%
+    unnest(cols=variables) %>%
     group_by(variable) %>%
     summarise(
-      stability = mean(stability, na.rm = TRUE),
-      bootstrap_p = mean(bootstrap_p, na.rm = TRUE)
+      mean_coefficient = mean(estimate, na.rm = TRUE),
+      ci_lower = quantile(estimate, 0.025, na.rm = TRUE),
+      ci_upper = quantile(estimate, 0.975, na.rm = TRUE),
+      prop_one_side = case_when(
+        mean_coefficient > 0 ~ length(estimate[estimate > 0]),
+        mean_coefficient < 0 ~ length(estimate[estimate < 0])
+      ),
+      bootstrap_p = 1 - (prop_one_side / length(estimate)),
+      stability = (n() / boot_reps) * 100
     ) %>%
+    select(-prop_one_side) %>%
+    right_join(variables, by = "variable") %>%
+    replace_na(list(
+      stability = 0
+    )) %>%
     arrange(desc(stability)) %>%
     mutate(stable = case_when(stability >= perm_thresh ~ "*"))
 
