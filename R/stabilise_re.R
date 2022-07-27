@@ -6,7 +6,7 @@
 #'
 #' @param data A dataframe containing an outcome variable to be permuted.
 #' @param outcome The outcome as a string (i.e. "y").
-#' @param level_2_id The variable name determining level 2 status as a string (i.e., "level_2_column_name").
+#' @param intercept_level_ids The variable name determining level 2 status as a string (i.e., "level_2_column_name").
 #' @param n_top_filter The number of variables to filter for final model (Default = 50).
 #' @param boot_reps The number of bootstrap samples. Default is "auto" which selects number based on dataframe size.
 #' @param permutations The number of times to be permuted per repeat. Default is "auto" which selects number based on dataframe size.
@@ -31,9 +31,12 @@
 
 utils::globalVariables(c("models", "in_model", "mean_coefficient", "ci_lower", "ci_upper", "stable"))
 
-stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
+stabilise_re <- function(data, outcome, intercept_level_ids, n_top_filter = 50,
                          boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
                          normalise = TRUE, dummy = TRUE, impute = TRUE) {
+
+  data <- as_tibble(data)
+
   boot_reps <- rep_selector_boot(data = data, boot_reps = boot_reps)
   permutations <- rep_selector_perm(data = data, permutations = permutations)
 
@@ -41,10 +44,10 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
 
   # Prep non level_2 data
   level_data <- data %>%
-    select(all_of(level_2_id))
+    select(all_of(intercept_level_ids))
 
   data_for_prep <- data %>%
-    select(-all_of(level_2_id))
+    select(-all_of(intercept_level_ids))
 
   data_prepped <- prep_data(data = data_for_prep, outcome = outcome, normalise = normalise, dummy = dummy, impute = impute)
 
@@ -55,14 +58,14 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
 
   # Filter
   x_names <- data %>%
-    select(-outcome, -all_of(level_2_id))
+    select(-outcome, -all_of(intercept_level_ids))
 
   df_re_model <- as.data.frame(colnames(x_names))
   colnames(df_re_model)[1] <- "variable"
 
   rand_names <- paste0("")
 
-  for (level_name in level_2_id) {
+  for (level_name in intercept_level_ids) {
     rand_names <- paste0(rand_names, "+ (1|", level_name, ")")
   }
 
@@ -97,7 +100,7 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
   x_selected <- x_names[, v_sel]
 
   data_selected <- df %>%
-    select(outcome, level_2_id) %>%
+    select(outcome, intercept_level_ids) %>%
     bind_cols(., x_selected)
 
   message("Done")
@@ -110,7 +113,7 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
     x_names_filtered <- RE_boot %>%
       select(
         -all_of(outcome),
-        -all_of(level_2_id)
+        -all_of(intercept_level_ids)
       )
 
     mod_code <- paste(colnames(x_names_filtered), sep = "", collapse = " + ")
@@ -125,7 +128,7 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
     selected <- selected_no_intercept %>% filter(selected_no_intercept$`t value` > 2 | selected_no_intercept$`t value` < -2)
     boot_final_mod_data <- RE_boot[, selected$variable]
     boot_final_mod_data_2 <- RE_boot %>%
-      select(outcome, level_2_id) %>%
+      select(outcome, intercept_level_ids) %>%
       bind_cols(boot_final_mod_data)
 
     final_mod_code <- paste(colnames(boot_final_mod_data_2[, 3:ncol(boot_final_mod_data_2)]), sep = "", collapse = "+")
@@ -244,7 +247,7 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
     x_selected <- x_names[, v_sel]
 
     data_selected <- data_to_use %>%
-      select(outcome, level_2_id) %>%
+      select(outcome, intercept_level_ids) %>%
       bind_cols(x_selected)
 
     for (k in 1:perm_boot_reps) {
@@ -327,7 +330,7 @@ stabilise_re <- function(data, outcome, level_2_id, n_top_filter = 50,
   selected_to__model <- df %>% select(selected_variables)
 
   selected_to__model2 <- df %>%
-    select(all_of(outcome), level_2_id) %>%
+    select(all_of(outcome), intercept_level_ids) %>%
     bind_cols(selected_to__model)
 
   mod_code_sel <- paste(colnames(selected_to__model), sep = "", collapse = "+")
