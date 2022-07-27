@@ -6,7 +6,7 @@
 #'
 #' @param data A dataframe containing an outcome variable to be permuted.
 #' @param outcome The outcome as a string (i.e. "y").
-#' @param intercept_level_ids The variable name determining level 2 status as a string (i.e., "level_2_column_name").
+#' @param intercept_level_ids A vector names defining which variables are random effect, i.e., "c(level_2_column_name", "level_3_column_name").
 #' @param n_top_filter The number of variables to filter for final model (Default = 50).
 #' @param boot_reps The number of bootstrap samples. Default is "auto" which selects number based on dataframe size.
 #' @param permutations The number of times to be permuted per repeat. Default is "auto" which selects number based on dataframe size.
