@@ -25,6 +25,7 @@ perm_sample <- function(data, outcome, permutations, perm_boot_reps) {
 
 perm_model <- function(perm_data, data, outcome, perm_boot_reps, selected_model, type) {
   # TODO: Doesn't function well with long factor names
+
   perm_data %>%
     mutate(perm_coefs = map(.x = .$splits, .f = ~ as.data.frame(.) %>%
       selected_model(., outcome = outcome, type = type), .id = "bootstrap")) %>%

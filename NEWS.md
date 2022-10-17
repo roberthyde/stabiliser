@@ -1,6 +1,6 @@
-## stabiliser 1.0.2
+## stabiliser 1.0.3
 
 ## Major changes
-Now adding function for both the simulation, and analysis of clustered dataset structure with the functions simulate_data_re() and stabilise_re().
+Now adding the ability to extract coefficients and confidence intervals from the triangulate() function. 
 
 ## Bug fixes

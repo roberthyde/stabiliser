@@ -1,7 +1,7 @@
-## Update to stabiliser version 1.0.2
+## Update to stabiliser version 1.0.3
 
-This is an update to version 1.0.1.
-Now adding function for both the simulation, and analysis of clustered dataset structure with the functions simulate_data_re() and stabilise_re().
+This is an update to version 1.0.2.
+Now adding the ability to extract coefficients and confidence intervals from the triangulate() function. 
 
 ### Previous CRAN comments:
 
