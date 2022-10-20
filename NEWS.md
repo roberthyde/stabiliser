@@ -1,6 +1,6 @@
-## stabiliser 1.0.3
+## stabiliser 1.0.4
 
 ## Major changes
-Now adding the ability to extract coefficients and confidence intervals from the triangulate() function. 
+Now adding the ability to extract intercepts from stabilise() and triangulate()
 
 ## Bug fixes

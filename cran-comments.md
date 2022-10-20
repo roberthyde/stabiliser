@@ -1,7 +1,7 @@
-## Update to stabiliser version 1.0.3
+## Update to stabiliser version 1.0.4
 
-This is an update to version 1.0.2.
-Now adding the ability to extract coefficients and confidence intervals from the triangulate() function. 
+This is an update to version 1.0.3.
+Now adding the ability to pull intercepts from both stabilise() and triangulate()
 
 ### Previous CRAN comments:
 
