@@ -31,6 +31,7 @@ perm_model <- function(perm_data, data, outcome, perm_boot_reps, selected_model,
       selected_model(., outcome = outcome, type = type), .id = "bootstrap")) %>%
     select(-splits) %>%
     unnest(perm_coefs) %>%
+    filter(variable != "(Intercept)") %>%
     select(-id) %>%
     group_by(permutation) %>%
     nest() %>%
