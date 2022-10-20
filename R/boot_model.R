@@ -32,7 +32,8 @@ boot_summarise <- function(booted_obj, data, outcome, boot_reps) {
   variable_names <- data %>%
     select(-outcome)
 
-  variables <- tibble(variable = colnames(variable_names))
+  variable_names <- c(colnames(variable_names), "(Intercept)")
+  variables <- tibble(variable = variable_names)
 
 
   booted_obj %>%
