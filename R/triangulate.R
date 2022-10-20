@@ -24,7 +24,8 @@ triangulate <- function(object, quantile = 1) {
     summarise(stability = mean(stability, na.rm = TRUE)) %>%
     perm_summarise(permed_object = ., quantile = quantile)
 
-  variables <- tibble(variable = object[[1]]$variable_names)
+  variables <- tibble(variable = c("(Intercept)", object[[1]]$variable_names))
+
   number_models <- length(object)
   boot_reps <- nrow(object[[1]]$boot_coefs) * number_models
 
@@ -52,7 +53,10 @@ triangulate <- function(object, quantile = 1) {
 
   list(
     "combi" = list(
-      "stability" = stability,
+      "stability" = stability %>%
+        filter(variable != "(Intercept)"),
+      "intercept" = stability %>%
+        filter(variable == "(Intercept)"),
       "perm_thresh" = perm_thresh
     )
   )
