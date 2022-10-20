@@ -45,9 +45,7 @@ model_mcp <- function(data, outcome, type) {
       estimate = value
     ) %>%
     filter(
-      variable != "(Intercept)",
       estimate != 0,
-      !grepl("(Intercept)", variable),
       !grepl("Xm[, -1]", variable)
     ) %>%
     mutate(variable = str_remove_all(variable, "`"))

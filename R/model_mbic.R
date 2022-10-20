@@ -41,7 +41,6 @@ model_mbic <- function(data, outcome, type) {
     rownames_to_column(., var = "variable") %>%
     mutate(variable = str_remove_all(variable, "`")) %>%
     filter(
-      !grepl("(Intercept)", variable),
       !grepl("Xm[, -1]", variable)
     ) %>%
     rename(estimate = Estimate) %>%

@@ -44,6 +44,5 @@ model_lasso <- function(data, outcome, type) {
       variable = name,
       estimate = coefficient
     ) %>%
-    filter(variable != "(Intercept)") %>%
     select(variable, estimate)
 }
