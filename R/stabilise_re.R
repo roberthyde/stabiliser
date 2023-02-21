@@ -130,9 +130,18 @@ stabilise_re <- function(data, outcome, intercept_level_ids, n_top_filter = 50,
       select(outcome, intercept_level_ids) %>%
       bind_cols(boot_final_mod_data)
 
-    final_mod_code <- paste(colnames(boot_final_mod_data_2[, 3:ncol(boot_final_mod_data_2)]), sep = "", collapse = "+")
 
-    final_boot_mod <- suppressMessages(lmer(paste0(outcome, " ~ ", final_mod_code, rand_names), data = boot_final_mod_data_2))
+    if(ncol(boot_final_mod_data_2) > 2){
+      final_mod_code <- paste(colnames(boot_final_mod_data_2[, 3:ncol(boot_final_mod_data_2)]), sep = "", collapse = "+")
+
+      final_boot_mod <- suppressMessages(lmer(paste0(outcome, " ~ ", final_mod_code, rand_names), data = boot_final_mod_data_2))
+    }
+
+    if(ncol(boot_final_mod_data_2) <= 2){  # TODO: Can't rely on implied column numbers here.
+      rand_names_re_only <- substring(rand_names, 2)
+
+      final_boot_mod <- suppressMessages(lmer(paste0(outcome, " ~ ", rand_names_re_only), data = boot_final_mod_data_2))
+    }
 
     final_boot_mod_out <- summary(final_boot_mod)
 
