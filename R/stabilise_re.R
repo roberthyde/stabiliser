@@ -251,6 +251,7 @@ stabilise_re <- function(data, outcome, intercept_level_ids, n_top_filter = 50,
     vars_select <- vars_select_order[1:n_top_filter, ]
 
     v_sel <- vars_select$ID
+    v_sel<-v_sel[!is.na(v_sel)]
 
     x_selected <- x_names[, v_sel]
 
