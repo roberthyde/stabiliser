@@ -1,6 +1,6 @@
-## stabiliser 1.0.4
+## stabiliser 1.0.5
 
 ## Major changes
-Now adding the ability to extract intercepts from stabilise() and triangulate()
+No major changes, resubmitting as bigstep package now available again on cRAN. 
 
 ## Bug fixes
