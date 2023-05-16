@@ -21,8 +21,7 @@ models (Lima et al., 2021).
 
 ## Installation
 
-You can install this package from github using the devtools package as
-follows:
+You can install this package from CRAN as follows:
 
 ``` r
 install.packages("stabiliser")
