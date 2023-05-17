@@ -1,4 +1,4 @@
-## Update to stabiliser version 1.0.5
+## Update to stabiliser version 1.0.6
 
 This is an update to version 1.0.4.
 No changes to 1.0.4, submitting as requested as bigstep package now available again on CRAN. 

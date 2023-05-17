@@ -1,6 +1,7 @@
-## stabiliser 1.0.5
+## stabiliser 1.0.6
 
 ## Major changes
-No major changes, resubmitting as bigstep package now available again on cRAN. 
+Updating after bigstep update on CRAN. 
 
 ## Bug fixes
+None
