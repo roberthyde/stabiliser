@@ -1,7 +1,7 @@
-# stabiliser 1.0.6
+# stabiliser 1.0.7
 
 ## Major changes
-Updating after bigstep update on CRAN. 
+Author updates. 
 
 ## Bug fixes
 None

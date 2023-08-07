@@ -1,6 +1,6 @@
 Package: stabiliser
 Title: Stabilising Variable Selection
-Version: 1.0.6
+Version: 1.0.7
 Authors@R: 
     c(
     person(given = "Robert",
@@ -8,14 +8,18 @@ Authors@R:
            role = c("aut", "cre"),
            email = "robert.hyde4@nottingham.ac.uk",
            comment = c(ORCID = "https://orcid.org/0000-0002-8705-9405")),
-    person(given = "Martin",
-           family = "Green",
-           role = c("aut"),
-           email = "martin.green@nottingham.ac.uk"),
     person(given = "Eliana",
            family = "Lima",
            role = c("aut"),
-           email = "eliana.lima1@nottingham.ac.uk"))       
+           email = "eliana.lima1@nottingham.ac.uk")),
+    person(given = "Matthew",
+           family = "Barden",
+           role = c("aut"),
+           email = "matthew.barden@liverpool.ac.uk")),
+    person(given = "Martin",
+           family = "Green",
+           role = c("aut"),
+           email = "martin.green@nottingham.ac.uk")    
 Description: A stable approach to variable selection through stability selection and the use of a permutation-based objective stability threshold. Lima et al (2021) <doi:10.1038/s41598-020-79317-8>, Meinshausen and Buhlmann (2010) <doi:10.1111/j.1467-9868.2010.00740.x>.
 License: MIT + file LICENSE
 Encoding: UTF-8

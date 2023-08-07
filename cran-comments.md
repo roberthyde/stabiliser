@@ -1,15 +1,9 @@
-## Update to stabiliser version 1.0.6
+## Update to stabiliser version 1.0.7
 
-This is an update to version 1.0.4.
-No changes to 1.0.4, submitting as requested as bigstep package now available again on CRAN. 
+This is an update to version 1.0.6.
+No changes to 1.0.6, submitting to update author details. 
 
 ### Previous CRAN comments:
-
-* Corrected DOIs to "Lima et al (2021) <doi:10.1038/s41598-020-79317-8>, Meinshausen and Buhlmann (2010) <doi:10.1111/j.1467-9868.2010.00740.x>."
-* Added references to description field of DESCRIPTION file
-* Added value descriptions to the .Rd files of the three exported functions; stabilise, triangulate and stab_plot
-* Converted the title to title case: 'Robust Variable Selection using Stability Selection'
-* Now added simulate_data() function. 
 
 ### Test environments
 * local Windows install, R 4.1.0
