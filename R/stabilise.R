@@ -39,6 +39,7 @@ stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", 
   boot_data <- boot_sample(data = data, boot_reps = boot_reps)
   perm_data <- perm_sample(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps)
 
+
   output <- models %>%
     map(., ~ perm_stab(
       data = data,
@@ -56,4 +57,5 @@ stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", 
   names(output) <- models
 
   output
+  #print(output)
 }
