@@ -57,5 +57,4 @@ stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", 
   names(output) <- models
 
   output
-  #print(output)
 }
