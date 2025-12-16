@@ -1,46 +1,63 @@
 
-set.seed(123)
 
-# Parameters
-n_subjects <- 100
-obs_per_subject <- 10
-beta0 <- -1
-beta1 <- 0.8   # true effect for x1
-beta2 <- -0.5  # true effect for x2
-sigma_u <- 1   # random intercept SD
+simulate_lr_re_data <- function(
+    n_subjects = 100,
+    obs_per_subject = 10,
+    n_signal = 2,            # number of causal predictors
+    n_noise  = 3,            # number of junk predictors
+    beta0    = -1,           # intercept
+    beta_signal = NULL,      # optional: effects for causal predictors
+    sigma_u  = 1            # SD for random intercepts
+){
 
-# Subject IDs
-subject_id <- rep(1:n_subjects, each = obs_per_subject)
+  # Basic checks
+  stopifnot(n_subjects >= 1, obs_per_subject >= 1,
+            n_signal >= 0, n_noise >= 0)
 
-# Random intercepts
-u <- rnorm(n_subjects, mean = 0, sd = sigma_u)
-rand_intercepts <- rep(u, each = obs_per_subject)
+  N <- n_subjects * obs_per_subject
 
-# True predictors
-x1 <- rnorm(n_subjects * obs_per_subject)
-x2 <- rnorm(n_subjects * obs_per_subject)
+  # Random intercepts per subject
+  subject_id <- rep(seq_len(n_subjects), each = obs_per_subject)
+  u <- rnorm(n_subjects, mean = 0, sd = sigma_u)
+  rand_intercepts <- rep(u, each = obs_per_subject)
 
-# Junk predictors (no effect)
-junk1 <- rnorm(n_subjects * obs_per_subject)
-junk2 <- rnorm(n_subjects * obs_per_subject)
-junk3 <- rnorm(n_subjects * obs_per_subject)
+  # Generate causal predictors x1..x{n_signal}
+  X_signal <- NULL
+  if (n_signal > 0) {
+    X_signal <- replicate(n_signal, rnorm(N), simplify = TRUE)
+    colnames(X_signal) <- paste0("x", seq_len(n_signal))
+    # If user doesn't provide betas, make simple defaults
+    if (is.null(beta_signal)) {
+      beta_signal <- rep(0.6, n_signal)
+    }
+  } else {
+    beta_signal <- numeric(0)
+  }
 
-# Linear predictor (only x1 and x2 matter)
-eta <- beta0 + beta1 * x1 + beta2 * x2 + rand_intercepts
+  # Generate junk predictors junk1..junk{n_noise}
+  X_noise <- NULL
+  if (n_noise > 0) {
+    X_noise <- replicate(n_noise, rnorm(N), simplify = TRUE)
+    colnames(X_noise) <- paste0("junk", seq_len(n_noise))
+  }
 
-# Probability and outcome
-p <- 1 / (1 + exp(-eta))
-y <- rbinom(n_subjects * obs_per_subject, size = 1, prob = p)
+  # Linear predictor: intercept + random intercept + causal effects
+  eta <- beta0 + rand_intercepts
+  if (!is.null(X_signal)) {
+    eta <- eta + as.vector(X_signal %*% beta_signal)
+  }
 
-# Combine into data frame
-synthetic_data <- data.frame(
-  subject_id = factor(subject_id),
-  x1 = x1,
-  x2 = x2,
-  junk1 = junk1,
-  junk2 = junk2,
-  junk3 = junk3,
-  y = y
-)
+  # Outcome
+  p <- 1 / (1 + exp(-eta))
+  y <- rbinom(N, size = 1, prob = p)
 
+  # Bind into a data frame
+  df <- data.frame(
+    subject_id = factor(subject_id),
+    y = y
+  )
 
+  df <- cbind(df, as.data.frame(X_noise))
+  df <- cbind(df, as.data.frame(X_signal))
+  return(df)
+}

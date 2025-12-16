@@ -16,6 +16,8 @@
 #' @param impute Impute missing data (TRUE/FALSE)
 #' @param force_vars Variables to force into the model
 #' @param base_id level of the random effect to bootstrap by
+#' @param parallel TRUE or FALSE, whether to set up parallel processing
+#' @param num_cores Number of cores to use if parallel processing required
 #'
 #'
 #' @return A list containing a table of variable stabilities and a numeric permutation threshold.
@@ -38,21 +40,6 @@ require(lme4)
 require(furrr)
 plan(multisession, workers = 4)
 
-
-## To do: force drop of force_vars variables from the model run code, or this will be duplicated
-
-
-
-start <- Sys.time()
-
-#m_survival_2 <- m_survival_2 %>% select(herd, id, lame, parity_group, log_time_1, prev_total_yield_cs, prev_305_yield_cs, starts_with("cumulative_") )
-#test_df <- m_survival_2[m_survival_2$id %in% sample(m_survival_2$id,500),]
-#test_df$lame <- if_else(test_df$lame == "lame", 1,0) ## outcome must be numeric for use of correlations#
-
-#test_df <- test_df %>%
-#  select(-cumulative_count_IG) ## remove for zero variance
-
-
 utils::globalVariables(c("models", "in_model", "mean_coefficient", "ci_lower", "ci_upper", "sta
                          ble"))
 
@@ -63,7 +50,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
                                base_id) {
 
   if(parallel== TRUE){
-    plan(multisession, workers = cores)
+    future::plan(multisession, workers = cores)
     message("Parallel set up with ", cores, " cores")
   }
 
@@ -90,7 +77,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
   data_for_prep <- data %>%
     select(-all_of(intercept_level_ids))
 
-
   ## Must have no missing variables, TO DO make it work with normalistion etc
   data_prepped <- stabiliser:::prep_data(data = data_for_prep, outcome = outcome, normalise = normalise, dummy = dummy, impute = impute)
 
@@ -103,7 +89,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
   for (level_name in intercept_level_ids) {
     rand_names <- paste0(rand_names, "+ (1|", level_name, ")")
   }
-
 
   ## Set up DF to catch coefficients - including factor levels
   x_names <- data %>%
@@ -142,9 +127,8 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
 
   message("Dataset up and running...")
 
-  ## Set up a base dataframe to catch coefficients at various point
+  ## Set up a base data-frame to catch coefficients at various point
   base_names <- df_re_model[,1]
-
   base_df <- data.frame(variable = base_names)
 
   message("Done")
@@ -174,7 +158,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
       map(~ groups[[match(.x, group_ids)]]) %>%
       bind_rows() %>%
       mutate(.replicate = 1L)
-
 
     x_names_filtered <- RE_boot %>%
       select(
@@ -318,9 +301,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
   message("Permuting glmer...")
 
   # Permutation
-
-  #for (i in 1:permutations) {
-
   perm_function <- function(i, j, data, outcome, perm_boot_reps, base_id){
 
 
@@ -393,23 +373,12 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
       selected$variable <- rownames(selected)
       select_coef <- selected[, c("variable", "Estimate")]
       df_re_model <- left_join(df_re_model, select_coef, by = "variable")
-
-      print("Perm boot rep model is: ")
-      print(df_re_model)
-
-      print("permutation repeat done")
-
     }
 
-    print("DF model is")
-    print(df_re_model)
     P_CMS_NEW <- df_re_model[, -1]
     P_CMS_NEW[is.na(P_CMS_NEW)] <- 0
     P_CMS_NEW <- (mapply(P_CMS_NEW, FUN = as.numeric))
     P_CMS_NEW <- matrix(data = P_CMS_NEW, ncol = ncol(P_CMS_NEW), nrow = nrow(P_CMS_NEW))
-
-    print("P CMS NEW Is")
-    print(P_CMS_NEW)
 
     P_CMS_NEW_quant <- as.data.frame(rowQuantiles(P_CMS_NEW, rows = NULL, cols = NULL, na.rm = TRUE, probs = c(0.025, 0.5, 0.975)))
     rownames(P_CMS_NEW_quant) <- df_re_model$variable
@@ -417,9 +386,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
     P_CMS_NEW_quant$sqrd2.5 <- sqrt(P_CMS_NEW_quant$`2.5%`^2)
     P_CMS_NEW_quant$sqrd5 <- sqrt(P_CMS_NEW_quant$`50%`^2)
     P_CMS_NEW_quant$sqrd97.5 <- sqrt(P_CMS_NEW_quant$`97.5%`^2)
-
-    print("P CMS quant is")
-    print(P_CMS_NEW_quant)
 
     nmber_bootstraps <- ncol(P_CMS_NEW)
     nmber_not_zero <- as.data.frame(count_row_if(neq(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)]))
@@ -455,11 +421,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
     table_stabil_means_PERM$stability <- as.numeric(table_stabil_means_PERM$stability)
     table_stabil_means_PERM <- table_stabil_means_PERM[order(-table_stabil_means_PERM$stability), ]
 
-
-    print("table of stability means perm is:")
-    print(table_stabil_means_PERM)
-
-    print("permutation boot rep DONE")
     return(table_stabil_means_PERM)
 
 
