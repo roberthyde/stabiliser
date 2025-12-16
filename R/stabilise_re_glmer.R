@@ -351,11 +351,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
     df_re_model <- data.frame(base_names)
     colnames(df_re_model)[1] <- "variable"
 
-    ## Filter code would need amending to use for mixed type data - use data as is
-    #data_selected <- data_to_use %>%
-    #  select(outcome, intercept_level_ids) %>%
-    #  bind_cols(x_names)
-
     data_selected <- data_to_use  %>%
       group_by(across(all_of(intercept_level_ids))) %>%
       mutate(
@@ -363,8 +358,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
                ~ sample(.x, size = length(.x), replace = FALSE))
       ) %>%
       ungroup()
-
-
 
     for (j in 1:perm_boot_reps) {
 
@@ -401,42 +394,44 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
       select_coef <- selected[, c("variable", "Estimate")]
       df_re_model <- left_join(df_re_model, select_coef, by = "variable")
 
+      print("Perm boot rep model is: ")
+      print(df_re_model)
+
+      print("permutation repeat done")
+
     }
-
-    print("permutations DONE")
-
-
 
     print("DF model is")
     print(df_re_model)
-    CMS_NEW <- df_re_model[, -1]
-    CMS_NEW[is.na(CMS_NEW)] <- 0
-    CMS_NEW <- (mapply(CMS_NEW, FUN = as.numeric))
-    CMS_NEW <- matrix(data = CMS_NEW, ncol = ncol(CMS_NEW), nrow = nrow(CMS_NEW))
+    P_CMS_NEW <- df_re_model[, -1]
+    P_CMS_NEW[is.na(P_CMS_NEW)] <- 0
+    P_CMS_NEW <- (mapply(P_CMS_NEW, FUN = as.numeric))
+    P_CMS_NEW <- matrix(data = P_CMS_NEW, ncol = ncol(P_CMS_NEW), nrow = nrow(P_CMS_NEW))
 
-    print("CMS NEW Is")
-    print(CMS_NEW)
+    print("P CMS NEW Is")
+    print(P_CMS_NEW)
 
-    rownames(CMS_NEW_quant) <- df_re_model$variable
+    P_CMS_NEW_quant <- as.data.frame(rowQuantiles(P_CMS_NEW, rows = NULL, cols = NULL, na.rm = TRUE, probs = c(0.025, 0.5, 0.975)))
+    rownames(P_CMS_NEW_quant) <- df_re_model$variable
 
-    CMS_NEW_quant$sqrd2.5 <- sqrt(CMS_NEW_quant$`2.5%`^2)
-    CMS_NEW_quant$sqrd5 <- sqrt(CMS_NEW_quant$`50%`^2)
-    CMS_NEW_quant$sqrd97.5 <- sqrt(CMS_NEW_quant$`97.5%`^2)
+    P_CMS_NEW_quant$sqrd2.5 <- sqrt(P_CMS_NEW_quant$`2.5%`^2)
+    P_CMS_NEW_quant$sqrd5 <- sqrt(P_CMS_NEW_quant$`50%`^2)
+    P_CMS_NEW_quant$sqrd97.5 <- sqrt(P_CMS_NEW_quant$`97.5%`^2)
 
-    print("CMS quant is")
-    print(CMS_NEW_quant)
+    print("P CMS quant is")
+    print(P_CMS_NEW_quant)
 
-    nmber_bootstraps <- ncol(CMS_NEW)
-    nmber_not_zero <- as.data.frame(count_row_if(neq(0), CMS_NEW[, 1:ncol(CMS_NEW)]))
-    percent_counts_in_model_join_4 <- as.data.frame((100 * count_row_if(neq(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_bootstraps)
-    P_value_calc1_in_model_join_4 <- as.data.frame(((100 * count_row_if(gt(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_not_zero) / 100)
-    P_value_calc2_in_model_join_4 <- as.data.frame(((100 * count_row_if(lt(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_not_zero) / 100)
+    nmber_bootstraps <- ncol(P_CMS_NEW)
+    nmber_not_zero <- as.data.frame(count_row_if(neq(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)]))
+    percent_counts_in_model_join_4 <- as.data.frame((100 * count_row_if(neq(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)])) / nmber_bootstraps)
+    P_value_calc1_in_model_join_4 <- as.data.frame(((100 * count_row_if(gt(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)])) / nmber_not_zero) / 100)
+    P_value_calc2_in_model_join_4 <- as.data.frame(((100 * count_row_if(lt(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)])) / nmber_not_zero) / 100)
     p_calcs <- as.data.frame((cbind(P_value_calc1_in_model_join_4, P_value_calc2_in_model_join_4)))
 
     colnames(p_calcs)[1:2] <- c("p1", "p2")
     p_calcs$Pvalue <- apply(p_calcs[1:2], 1, FUN = min)
 
-    percent_counts_in_model_join_4 <- as.data.frame(cbind(CMS_NEW_quant, percent_counts_in_model_join_4, p_calcs$Pvalue))
+    percent_counts_in_model_join_4 <- as.data.frame(cbind(P_CMS_NEW_quant, percent_counts_in_model_join_4, p_calcs$Pvalue))
     colnames(percent_counts_in_model_join_4)[7] <- "percent_in_model"
     colnames(percent_counts_in_model_join_4)[8] <- "Boot P"
 
@@ -460,9 +455,14 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
     table_stabil_means_PERM$stability <- as.numeric(table_stabil_means_PERM$stability)
     table_stabil_means_PERM <- table_stabil_means_PERM[order(-table_stabil_means_PERM$stability), ]
 
-    #table_stabil_means_PERM_multi <- left_join(table_stabil_means_PERM_multi, table_stabil_means_PERM, by = "variable")
 
+    print("table of stability means perm is:")
+    print(table_stabil_means_PERM)
+
+    print("permutation boot rep DONE")
     return(table_stabil_means_PERM)
+
+
   }
 
   if(parallel == TRUE){
@@ -489,7 +489,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
   perm_join_key <- names(perm_stab_out[[1]])[1]
   # Reduce with left_join by the key
   table_stabil_means_PERM_multi <- reduce(perm_stab_out, left_join, by = perm_join_key)
-
 
   max_stab_df <- data.frame()
   for (col in 2:ncol(table_stabil_means_PERM_multi)) {
