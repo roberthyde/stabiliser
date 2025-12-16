@@ -161,10 +161,10 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
 
     # Split data by ID
     groups <- data_selected %>%
-      group_split(.data[[base_id_char]], .keep = TRUE)
+      group_split(.data[[base_id_char]], keep = TRUE)
 
     # Extract group keys
-    group_ids <- map_chr(groups, ~ as.character(.x[[base_id_char]])[1])
+    group_ids <- map_chr(groups, ~ unique(.x[[base_id_char]])[1])
 
     # Sample group IDs with replacement
     boot_ids <- sample(group_ids, size = length(group_ids), replace = TRUE)
@@ -373,10 +373,10 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
 
       # Split data by ID
       groups <- data_selected %>%
-        group_split(.data[[base_id_char]], .keep = TRUE)
+        group_split(.data[[base_id_char]], keep = TRUE)
 
       # Extract group keys
-      group_ids <- map_chr(groups, ~ as.character(.x[[base_id_char]])[1])
+      group_ids <- map_chr(groups, ~ unique(.x[[base_id_char]])[1])
 
       # Sample group IDs with replacement
       boot_ids <- sample(group_ids, size = length(group_ids), replace = TRUE)
@@ -401,30 +401,22 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
       select_coef <- selected[, c("variable", "Estimate")]
       df_re_model <- left_join(df_re_model, select_coef, by = "variable")
 
+      print("remodel IS")
+      print(df_re_model)
     }
 
     print("permutations DONE")
 
-
-
-    print("DF model is")
-    print(df_re_model)
     CMS_NEW <- df_re_model[, -1]
     CMS_NEW[is.na(CMS_NEW)] <- 0
     CMS_NEW <- (mapply(CMS_NEW, FUN = as.numeric))
     CMS_NEW <- matrix(data = CMS_NEW, ncol = ncol(CMS_NEW), nrow = nrow(CMS_NEW))
-
-    print("CMS NEW Is")
-    print(CMS_NEW)
 
     rownames(CMS_NEW_quant) <- df_re_model$variable
 
     CMS_NEW_quant$sqrd2.5 <- sqrt(CMS_NEW_quant$`2.5%`^2)
     CMS_NEW_quant$sqrd5 <- sqrt(CMS_NEW_quant$`50%`^2)
     CMS_NEW_quant$sqrd97.5 <- sqrt(CMS_NEW_quant$`97.5%`^2)
-
-    print("CMS quant is")
-    print(CMS_NEW_quant)
 
     nmber_bootstraps <- ncol(CMS_NEW)
     nmber_not_zero <- as.data.frame(count_row_if(neq(0), CMS_NEW[, 1:ncol(CMS_NEW)]))
