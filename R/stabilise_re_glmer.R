@@ -8,14 +8,13 @@
 #' @param outcome The outcome as a string (i.e. "y").
 #' @param intercept_level_ids A vector names defining which variables are random effect, i.e., c("level_2_column_name", "level_3_column_name").
 #' @param n_top_filter The number of variables to filter for final model (Default = 50).
-#' @param boot_reps The number of bootstrap samples. Default is "auto" which selects number based on dataframe size.
+#' @param boot_reps The number of bootstrap samples. Default is "auto" which selects number based on dataframe size. For glmer models, these are subsamples of the dataset, set to 80%.
 #' @param permutations The number of times to be permuted per repeat. Default is "auto" which selects number based on dataframe size.
 #' @param perm_boot_reps The number of times to repeat each set of permutations. Default is 20.
 #' @param normalise Normalise numeric variables (TRUE/FALSE)
 #' @param dummy Create dummy variables for factors/characters (TRUE/FALSE)
 #' @param impute Impute missing data (TRUE/FALSE)
-#' @param force_vars Variables to force into the model
-#' @param base_id level of the random effect to bootstrap by
+#' @param base_id level of the random effect to bootstrap by, e.g individual. This is likely the lower level of random effect specified
 #' @param parallel TRUE or FALSE, whether to set up parallel processing
 #' @param num_cores Number of cores to use if parallel processing required
 #'
@@ -33,41 +32,33 @@
 #' @export
 #'
 
-
-require(expss)
-require(matrixStats)
-require(lme4)
-require(furrr)
-plan(multisession, workers = 4)
-
 utils::globalVariables(c("models", "in_model", "mean_coefficient", "ci_lower", "ci_upper", "sta
                          ble"))
 
-stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter = 50,
+stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NULL, n_top_filter = 50,
                                boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
                                normalise = FALSE, dummy = FALSE, impute = FALSE,
-                               parallel = TRUE, cores = 4, force_vars = NULL,
-                               base_id) {
+                               parallel = TRUE, cores = 4
+                               ) {
 
   if(parallel== TRUE){
     future::plan(multisession, workers = cores)
     message("Parallel set up with ", cores, " cores")
   }
 
-  base_id = base_id
+  ## If no base ID set, then default to first level of intercept levels
+  if(is.null(base_id)==TRUE){
+    base_id <- intercept_level_ids[1]
+  } else {
+    base_id = base_id
+  }
+
   data <- as_tibble(data)
 
   boot_reps <- stabiliser:::rep_selector_boot(data = data, boot_reps = boot_reps)
   permutations <- stabiliser:::rep_selector_perm(data = data, permutations = permutations)
 
-  message("Stabilising across ", boot_reps, " bootstrap resamples. Permuting ", permutations, " times, with ", perm_boot_reps, " bootstrap samples for each permutation.")
-
-  ## Prep force vars
-  if(!is.null(force_vars)== TRUE){
-    force_vars_plus <- paste0(force_vars, " + ", sep = "")
-  } else{
-    force_vars_plus <- ""
-  } ## So that binds an emplty placeholder into the model formula
+  message("Stabilising across ", boot_reps, "sub-samples. Permuting ", permutations, " times, with ", perm_boot_reps, "sub-samples for each permutation.")
 
 
   # Prep non level_2 data
@@ -141,6 +132,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
   boot_function <- function(i, data_selected, base_id){
 
     ## Bootstrap by Base ID - to keep observations together
+    message("Subsampling by ", base_id)
     base_id_char <- as.character(base_id)
 
     # Split data by ID
@@ -150,8 +142,8 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
     # Extract group keys
     group_ids <- map_chr(groups, ~ as.character(.x[[base_id_char]])[1])
 
-    # Sample group IDs with replacement
-    boot_ids <- sample(group_ids, size = length(group_ids), replace = TRUE)
+    # Stability selection based on subsmaplingSample group IDs with replacement
+    boot_ids <- sample(group_ids, size = floor(length(group_ids)*0.8), replace = FALSE)
 
     # Map sampled IDs back to their group data and bind
     RE_boot <- boot_ids %>%
@@ -167,7 +159,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
 
     mod_code <- paste(colnames(x_names_filtered), sep = "", collapse = " + ")
     print(mod_code)
-    mod_sim_RE_boot <- suppressMessages(glmer(paste0(outcome, " ~ ", force_vars_plus, mod_code, rand_names), data = RE_boot, family = binomial(link= "logit"), control=glmerControl(optimizer="bobyqa")))
+    mod_sim_RE_boot <- suppressMessages(glmer(paste0(outcome, " ~ ", mod_code, rand_names), data = RE_boot, family = binomial(link= "logit"), control=glmerControl(optimizer="bobyqa")))
     mod_sim_RE_out <- summary(mod_sim_RE_boot)
 
     print(mod_sim_RE_out)
@@ -198,7 +190,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
 
     boot_final_mod_data <- RE_boot[, selected_matches]
     boot_final_mod_data_2 <- RE_boot %>%
-      select(outcome, intercept_level_ids) %>%
+      select(outcome, all_of(intercept_level_ids)) %>%
       bind_cols(boot_final_mod_data)
 
     ## This needs to vary depending on how many random effects are in the model
@@ -213,7 +205,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
     if(ncol(boot_final_mod_data_2) <= length_rand){  # TODO: Can't rely on implied column numbers here - this is because it depends how many random effects there are
       rand_names_re_only <- substring(rand_names, 2)
 
-      final_boot_mod <- suppressMessages(glmer(paste0(outcome, " ~ ", force_vars_plus, rand_names_re_only), data = boot_final_mod_data_2, family = binomial(link= "logit"), control=glmerControl(optimizer="bobyqa"))) ## Added bracket here CHECK
+      final_boot_mod <- suppressMessages(glmer(paste0(outcome, " ~ ", rand_names_re_only), data = boot_final_mod_data_2, family = binomial(link= "logit"), control=glmerControl(optimizer="bobyqa"))) ## Added bracket here CHECK
     }
 
     final_boot_mod_out <- summary(final_boot_mod)
@@ -351,8 +343,8 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
       # Extract group keys
       group_ids <- map_chr(groups, ~ as.character(.x[[base_id_char]])[1])
 
-      # Sample group IDs with replacement
-      boot_ids <- sample(group_ids, size = length(group_ids), replace = TRUE)
+      # Sub-sample group IDs without replacement
+      boot_ids <- sample(group_ids, size = floor(length(group_ids)*0.8), replace = TRUE)
 
       # Map sampled IDs back to their group data and bind
       RE_boot <- boot_ids %>%
@@ -362,7 +354,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
 
       mod_code <- paste(colnames(RE_boot[, 3:ncol(RE_boot)]), sep = "", collapse = "+")
 
-      mod_sim_RE_boot <- suppressMessages(glmer(paste0(outcome, " ~ ", force_vars_plus, mod_code, rand_names), data = RE_boot, family = binomial(link= "logit"), control=glmerControl(optimizer="bobyqa")))
+      mod_sim_RE_boot <- suppressMessages(glmer(paste0(outcome, " ~ ", mod_code, rand_names), data = RE_boot, family = binomial(link= "logit"), control=glmerControl(optimizer="bobyqa")))
 
       mod_sim_RE_out <- summary(mod_sim_RE_boot)
 
@@ -464,7 +456,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
   in_model_selected <- table_stabil_means %>% filter(in_model == 1)
   selected_variables <- in_model_selected$variable
 
-  ## Match selected variables to their form in teh dataset
+  ## Match selected variables to their form in the dataset
   orig_names <- colnames(data)
 
   ## This allows use of not dummy factors, so that names can be matched
@@ -484,12 +476,12 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, n_top_filter 
   selected_to__model <- df %>% select(selected_matches)
 
   selected_to__model2 <- df %>%
-    select(all_of(outcome), intercept_level_ids, force_vars) %>%
+    select(all_of(outcome), intercept_level_ids) %>%
     bind_cols(selected_to__model)
 
   mod_code_sel <- paste(colnames(selected_to__model), sep = "", collapse = "+")
 
-  selected_mod <- glmer(paste0(outcome, " ~ ", force_vars_plus, mod_code_sel, rand_names), data = selected_to__model2, family = binomial(link= "logit"), control=glmerControl(optimizer="bobyqa"))
+  selected_mod <- glmer(paste0(outcome, " ~ ", mod_code_sel, rand_names), data = selected_to__model2, family = binomial(link= "logit"), control=glmerControl(optimizer="bobyqa"))
 
   selected_mod_out <- summary(selected_mod)
 
