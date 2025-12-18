@@ -1,6 +1,6 @@
-#' stabilise_re
+#' stabilise_re_glmer
 #'
-#' @name stabilise_re
+#' @name stabilise_re_glmer
 #'
 #' @description Function to calculate stability of variables' association with an outcome for a given model over a number of bootstrap repeats using clustered data.
 #'
@@ -23,11 +23,12 @@
 #'
 #' @import rsample
 #' @import dplyr
-#' @importFrom lme4 lmer
+#' @importFrom lme4 glmer
 #' @importFrom expss gt neq lt count_row_if
 #' @importFrom Hmisc rcorr
 #' @importFrom matrixStats rowQuantiles
 #' @importFrom purrr map
+#' @importFrom future plan
 #'
 #' @export
 #'
