@@ -1,6 +1,19 @@
+#' simulate_data_re_glmer
+#'
+#' @name simulate_data_re_glmer
+#'
+#' @description Simulate a dataset where some variables are associated with the outcome and some are unk
+#'
+#'
+#' @return A simulated dataset with a clustered outcome suitable for random effects analysis with a binary outcome
+#'
+#' @import dplyr
+#' @importFrom stats rnorm
+#'
+#' @export
+#'
 
-
-simulate_lr_re_data <- function(
+simulate_glmer_re_data <- function(
     n_subjects = 100,
     obs_per_subject = 10,
     n_signal = 2,            # number of causal predictors
