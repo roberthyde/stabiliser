@@ -23,11 +23,12 @@
 #'
 #' @import rsample
 #' @import dplyr
-#' @importFrom lme4 lmer
+#' @importFrom lme4 glmer
 #' @importFrom expss gt neq lt count_row_if
 #' @importFrom Hmisc rcorr
 #' @importFrom matrixStats rowQuantiles
 #' @importFrom purrr map
+#' @importFrom future plan
 #'
 #' @export
 #'
