@@ -29,6 +29,8 @@
 #' @importFrom matrixStats rowQuantiles
 #' @importFrom purrr map
 #' @importFrom future plan
+#' @importFrom future multisession
+#' @importFrom furrr future_map
 #'
 #' @export
 #'
@@ -40,7 +42,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
                                boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
                                normalise = FALSE, dummy = FALSE, impute = FALSE,
                                parallel = TRUE, cores = 4
-                               ) {
+) {
 
   if(parallel== TRUE){
     future::plan(multisession, workers = cores)
@@ -64,10 +66,10 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
 
   # Prep non level_2 data
   level_data <- data %>%
-    select(all_of(intercept_level_ids))
+    dplyr::select(all_of(intercept_level_ids))
 
   data_for_prep <- data %>%
-    select(-all_of(intercept_level_ids))
+    dplyr::select(-all_of(intercept_level_ids))
 
   ## Must have no missing variables, TO DO make it work with normalistion etc
   data_prepped <- stabiliser:::prep_data(data = data_for_prep, outcome = outcome, normalise = normalise, dummy = dummy, impute = impute)
@@ -84,7 +86,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
 
   ## Set up DF to catch coefficients - including factor levels
   x_names <- data %>%
-    select(-outcome, -all_of(intercept_level_ids))
+    dplyr::select(-outcome, -all_of(intercept_level_ids))
 
   ## get factor cols
   factor_cols <- map_lgl(x_names, is.factor)
@@ -153,7 +155,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
       mutate(.replicate = 1L)
 
     x_names_filtered <- RE_boot %>%
-      select(
+      dplyr::select(
         -all_of(outcome),
         -all_of(intercept_level_ids)
       )
@@ -191,7 +193,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
 
     boot_final_mod_data <- RE_boot[, selected_matches]
     boot_final_mod_data_2 <- RE_boot %>%
-      select(outcome, all_of(intercept_level_ids)) %>%
+      dplyr::select(outcome, all_of(intercept_level_ids)) %>%
       bind_cols(boot_final_mod_data)
 
     ## This needs to vary depending on how many random effects are in the model
@@ -214,7 +216,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
     COEFS_final <- as.data.frame(final_boot_mod_out$coefficients)
     COEFS_final$variable <- rownames(COEFS_final)
 
-    select_coef <- COEFS_final %>% select(variable, Estimate) ## Changed to names here rather than column positions
+    select_coef <- COEFS_final %>% dplyr::select(variable, Estimate) ## Changed to names here rather than column positions
 
     out <- left_join(base_df, select_coef, by = "variable")
 
@@ -255,19 +257,64 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
   CMS_NEW_quant$sqrd97.5 <- sqrt(CMS_NEW_quant$`97.5%`^2)
 
   CMS_NEW[is.na(CMS_NEW)] <- 0
+
+  print("CMS_NEW IS")
+  print(CMS_NEW)
+  #nmber_bootstraps <- ncol(CMS_NEW)
+  #nmber_not_zero <- as.data.frame(count_row_if(neq(0), CMS_NEW[, 1:ncol(CMS_NEW)]))
+  #percent_counts_in_model_join_4 <- as.data.frame((100 * count_row_if(neq(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_bootstraps)
+  #P_value_calc1_in_model_join_4 <- as.data.frame(((100 * count_row_if(gt(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_not_zero) / 100)
+  #P_value_calc2_in_model_join_4 <- as.data.frame(((100 * count_row_if(lt(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_not_zero) / 100)
+
+  ## Alt
+
+  ## Base R replacement for expss::count_row_if()
+  # Number of bootstrap columns
   nmber_bootstraps <- ncol(CMS_NEW)
-  nmber_not_zero <- as.data.frame(count_row_if(neq(0), CMS_NEW[, 1:ncol(CMS_NEW)]))
-  percent_counts_in_model_join_4 <- as.data.frame((100 * count_row_if(neq(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_bootstraps)
-  P_value_calc1_in_model_join_4 <- as.data.frame(((100 * count_row_if(gt(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_not_zero) / 100)
-  P_value_calc2_in_model_join_4 <- as.data.frame(((100 * count_row_if(lt(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_not_zero) / 100)
+
+  # Row-wise count of non-zero entries
+  nmber_not_zero <- rowSums(CMS_NEW != 0, na.rm = TRUE)
+
+  # Percent of non-zero per row (out of all bootstraps/columns)
+  percent_counts_in_model_join_4 <- (100 * nmber_not_zero) / nmber_bootstraps
+  percent_counts_in_model_join_4 <- as.data.frame(percent_counts_in_model_join_4)
+
+  # Row-wise count of positive (> 0) and negative (< 0) entries
+  num_pos <- rowSums(CMS_NEW > 0, na.rm = TRUE)
+  num_neg <- rowSums(CMS_NEW < 0, na.rm = TRUE)
+
+  # Proportion among non-zero only; guard against division by zero
+  P_value_calc1_in_model_join_4 <- as.data.frame(
+    ifelse(nmber_not_zero > 0, num_pos / nmber_not_zero, NA_real_)
+  )
+
+  P_value_calc2_in_model_join_4 <- as.data.frame(
+    ifelse(nmber_not_zero > 0, num_neg / nmber_not_zero, NA_real_)
+  )
+
+
+  print(P_value_calc1_in_model_join_4)
+  print(P_value_calc2_in_model_join_4)
+
+  #P_value_calc1_in_model_join_4 <- as.data.frame(colSums(CMS_NEW>0, na.rm = TRUE)/ colSums(CMS_NEW != 0, na.rm = TRUE))
+  #P_value_calc2_in_model_join_4 <- as.data.frame(colSums(CMS_NEW<0, na.rm = TRUE)/ colSums(CMS_NEW != 0, na.rm = TRUE))
 
   p_calcs <- as.data.frame((cbind(P_value_calc1_in_model_join_4, P_value_calc2_in_model_join_4)))
 
+
   colnames(p_calcs)[1:2] <- c("p1", "p2")
   p_calcs$Pvalue <- apply(p_calcs[1:2], 1, FUN = min)
+
+  print("P old version:")
+  print(p_calcs)
+
+
   percent_counts_in_model_join_4 <- as.data.frame(cbind(CMS_NEW_quant, percent_counts_in_model_join_4, p_calcs$Pvalue))
   colnames(percent_counts_in_model_join_4)[7] <- "percent_in_model"
   colnames(percent_counts_in_model_join_4)[8] <- "Boot P"
+
+  print("P next step:")
+  print(percent_counts_in_model_join_4)
 
   percent_counts_in_model_join_4_order <- percent_counts_in_model_join_4[order(-percent_counts_in_model_join_4$percent_in_model), ]
 
@@ -380,11 +427,32 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
     P_CMS_NEW_quant$sqrd5 <- sqrt(P_CMS_NEW_quant$`50%`^2)
     P_CMS_NEW_quant$sqrd97.5 <- sqrt(P_CMS_NEW_quant$`97.5%`^2)
 
+    #nmber_bootstraps <- ncol(P_CMS_NEW)
+    #nmber_not_zero <- as.data.frame(count_row_if(neq(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)]))
+    #percent_counts_in_model_join_4 <- as.data.frame((100 * count_row_if(neq(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)])) / nmber_bootstraps)
+
     nmber_bootstraps <- ncol(P_CMS_NEW)
-    nmber_not_zero <- as.data.frame(count_row_if(neq(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)]))
-    percent_counts_in_model_join_4 <- as.data.frame((100 * count_row_if(neq(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)])) / nmber_bootstraps)
-    P_value_calc1_in_model_join_4 <- as.data.frame(((100 * count_row_if(gt(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)])) / nmber_not_zero) / 100)
-    P_value_calc2_in_model_join_4 <- as.data.frame(((100 * count_row_if(lt(0), P_CMS_NEW[, 1:ncol(P_CMS_NEW)])) / nmber_not_zero) / 100)
+
+    # Row-wise count of non-zero entries
+    nmber_not_zero <- rowSums(P_CMS_NEW != 0, na.rm = TRUE)
+
+    # Percent of non-zero per row (out of all bootstraps/columns)
+    percent_counts_in_model_join_4 <- (100 * nmber_not_zero) / nmber_bootstraps
+    percent_counts_in_model_join_4 <- as.data.frame(percent_counts_in_model_join_4)
+
+    # Row-wise count of positive (> 0) and negative (< 0) entries
+    num_pos <- rowSums(P_CMS_NEW > 0, na.rm = TRUE)
+    num_neg <- rowSums(P_CMS_NEW < 0, na.rm = TRUE)
+
+    # Proportion among non-zero only; guard against division by zero
+    P_value_calc1_in_model_join_4 <- as.data.frame(
+      ifelse(nmber_not_zero > 0, num_pos / nmber_not_zero, NA_real_)
+    )
+
+    P_value_calc2_in_model_join_4 <- as.data.frame(
+      ifelse(nmber_not_zero > 0, num_neg / nmber_not_zero, NA_real_)
+    )
+
     p_calcs <- as.data.frame((cbind(P_value_calc1_in_model_join_4, P_value_calc2_in_model_join_4)))
 
     colnames(p_calcs)[1:2] <- c("p1", "p2")
