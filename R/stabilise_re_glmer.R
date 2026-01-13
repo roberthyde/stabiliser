@@ -258,16 +258,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
 
   CMS_NEW[is.na(CMS_NEW)] <- 0
 
-  print("CMS_NEW IS")
-  print(CMS_NEW)
-  #nmber_bootstraps <- ncol(CMS_NEW)
-  #nmber_not_zero <- as.data.frame(count_row_if(neq(0), CMS_NEW[, 1:ncol(CMS_NEW)]))
-  #percent_counts_in_model_join_4 <- as.data.frame((100 * count_row_if(neq(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_bootstraps)
-  #P_value_calc1_in_model_join_4 <- as.data.frame(((100 * count_row_if(gt(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_not_zero) / 100)
-  #P_value_calc2_in_model_join_4 <- as.data.frame(((100 * count_row_if(lt(0), CMS_NEW[, 1:ncol(CMS_NEW)])) / nmber_not_zero) / 100)
-
-  ## Alt
-
   ## Base R replacement for expss::count_row_if()
   # Number of bootstrap columns
   nmber_bootstraps <- ncol(CMS_NEW)
@@ -291,13 +281,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
   P_value_calc2_in_model_join_4 <- as.data.frame(
     ifelse(nmber_not_zero > 0, num_neg / nmber_not_zero, NA_real_)
   )
-
-
-  print(P_value_calc1_in_model_join_4)
-  print(P_value_calc2_in_model_join_4)
-
-  #P_value_calc1_in_model_join_4 <- as.data.frame(colSums(CMS_NEW>0, na.rm = TRUE)/ colSums(CMS_NEW != 0, na.rm = TRUE))
-  #P_value_calc2_in_model_join_4 <- as.data.frame(colSums(CMS_NEW<0, na.rm = TRUE)/ colSums(CMS_NEW != 0, na.rm = TRUE))
 
   p_calcs <- as.data.frame((cbind(P_value_calc1_in_model_join_4, P_value_calc2_in_model_join_4)))
 
