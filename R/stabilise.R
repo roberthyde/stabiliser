@@ -25,7 +25,7 @@
 #'
 #' @export
 #'
-utils::globalVariables(c("models"))
+utils::globalVariables(c("models", "id"))
 
 stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
                       models = c("enet"), type = "linear", quantile = 1, normalise = TRUE, dummy = TRUE, impute = TRUE) {
@@ -36,8 +36,8 @@ stabilise <- function(data, outcome, boot_reps = "auto", permutations = "auto", 
 
   message("Stabilising across ", boot_reps, " bootstrap resamples. Permuting ", permutations, " times, with ", perm_boot_reps, " bootstrap samples for each permutation.")
 
-  boot_data <- boot_sample(data = data, boot_reps = boot_reps)
-  perm_data <- perm_sample(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps)
+  boot_data <- boot_sample(data = data, boot_reps = boot_reps) ## This is where id is generated
+  perm_data <- perm_sample(data = data, outcome = outcome, permutations = permutations, perm_boot_reps = perm_boot_reps) ## This is where id is generated
 
 
   output <- models %>%
