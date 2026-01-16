@@ -28,13 +28,15 @@
 #' @importFrom Hmisc rcorr
 #' @importFrom matrixStats rowQuantiles
 #' @importFrom purrr map
+#' @importFrom furrr future_map
 #' @importFrom future plan
+#' @importFrom future multisession
 #'
 #' @export
 #'
 
 utils::globalVariables(c("models", "in_model", "mean_coefficient", "ci_lower", "ci_upper", "sta
-                         ble"))
+                         ble", "id"))
 
 stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NULL, n_top_filter = 50,
                                boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
@@ -477,7 +479,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
   selected_to__model <- df %>% select(selected_matches)
 
   selected_to__model2 <- df %>%
-    select(all_of(outcome), intercept_level_ids) %>%
+    select(all_of(outcome), all_of(intercept_level_ids)) %>%
     bind_cols(selected_to__model)
 
   mod_code_sel <- paste(colnames(selected_to__model), sep = "", collapse = "+")
