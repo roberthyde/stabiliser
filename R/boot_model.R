@@ -17,7 +17,7 @@
 #' @importFrom stats quantile
 #'
 
-utils::globalVariables(c(".", "variable", "stability", "estimate", "quantile", "prop_one_side", "bootstrap_p"))
+utils::globalVariables(c(".", "variable", "stability", "estimate", "quantile", "prop_one_side", "bootstrap_p", "id"))
 
 boot_sample <- function(data, boot_reps) {
   rsample::bootstraps(data, boot_reps)

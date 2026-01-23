@@ -16,7 +16,7 @@
 #' @importFrom utils globalVariables
 #' @importFrom rsample permutations
 #'
-utils::globalVariables(c("stab_df", "perm_thresh", "mean_thresh", "perm_coefs", "perm_stabs", "splits", "permutation"))
+utils::globalVariables(c("stab_df", "perm_thresh", "mean_thresh", "perm_coefs", "perm_stabs", "splits", "permutation", "id"))
 
 perm_sample <- function(data, outcome, permutations, perm_boot_reps) {
   rsample::permutations(data = data, permute = outcome, times = permutations) %>%

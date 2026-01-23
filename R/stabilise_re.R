@@ -29,7 +29,7 @@
 #' @export
 #'
 
-utils::globalVariables(c("models", "in_model", "mean_coefficient", "ci_lower", "ci_upper", "stable"))
+utils::globalVariables(c("models", "in_model", "mean_coefficient", "ci_lower", "ci_upper", "stable", "id"))
 
 stabilise_re <- function(data, outcome, intercept_level_ids, n_top_filter = 50,
                          boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
@@ -76,7 +76,7 @@ stabilise_re <- function(data, outcome, intercept_level_ids, n_top_filter = 50,
   colnames(df_cor1_func)[2] <- "p"
   for (i in 1:(ncol(x_names))) {
     x_cor <- df %>%
-      select(outcome) %>%
+      select(all_of(outcome)) %>%
       bind_cols(x_names[, i]) %>%
       as.data.frame()
 
@@ -99,7 +99,7 @@ stabilise_re <- function(data, outcome, intercept_level_ids, n_top_filter = 50,
   x_selected <- x_names[, v_sel]
 
   data_selected <- df %>%
-    select(outcome, intercept_level_ids) %>%
+    select(outcome, all_of(intercept_level_ids)) %>%
     bind_cols(., x_selected)
 
   message("Done")
@@ -127,7 +127,7 @@ stabilise_re <- function(data, outcome, intercept_level_ids, n_top_filter = 50,
     selected <- selected_no_intercept %>% filter(selected_no_intercept$`t value` > 2 | selected_no_intercept$`t value` < -2)
     boot_final_mod_data <- RE_boot[, selected$variable]
     boot_final_mod_data_2 <- RE_boot %>%
-      select(outcome, intercept_level_ids) %>%
+      select(outcome, all_of(intercept_level_ids)) %>%
       bind_cols(boot_final_mod_data)
 
 

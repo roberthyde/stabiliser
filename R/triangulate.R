@@ -15,7 +15,7 @@
 #' @export
 #'
 
-utils::globalVariables(c("object", "model", "perm_stabs", "permutation"))
+utils::globalVariables(c("object", "model", "perm_stabs", "permutation", "id"))
 
 triangulate <- function(object, quantile = 1) {
   # Mean stability across all models for each permutation

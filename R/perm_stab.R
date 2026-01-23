@@ -7,7 +7,7 @@
 #' @importFrom tidyr nest
 #'
 
-utils::globalVariables(c("data", "outcome", "boot_reps", "permutations", "perm_boot_reps", "model_name"))
+utils::globalVariables(c("data", "outcome", "boot_reps", "permutations", "perm_boot_reps", "model_name", "id"))
 
 perm_stab <- function(data, boot_data, perm_data, outcome, boot_reps, permutations, perm_boot_reps, model_name, type, quantile) {
   try({
