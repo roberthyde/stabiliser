@@ -11,8 +11,10 @@ This package uses bootstrap resampling and an objective selection stability thre
 \author{
 Robert Hyde \email{robert.hyde4@nottingham.ac.uk}
 
-Martin Green
-
 Eliana Lima
+
+Matthew Barden
+
+Martin Green
 }
 \keyword{internal}

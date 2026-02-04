@@ -9,6 +9,7 @@
 #'
 #' @import dplyr
 #' @importFrom stats rnorm
+#' @importFrom stats binomial rbinom
 #'
 #' @export
 #'
