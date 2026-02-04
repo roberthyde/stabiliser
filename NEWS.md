@@ -1,7 +1,7 @@
 # stabiliser 1.0.7
 
 ## Major changes
-Author updates. 
+Update with dplyr changes. 
 
 ## Bug fixes
 None
