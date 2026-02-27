@@ -24,6 +24,7 @@
 #' @import rsample
 #' @import dplyr
 #' @importFrom lme4 glmer
+#' @importFrom lme4 glmerControl
 #' @importFrom expss gt neq lt count_row_if
 #' @importFrom Hmisc rcorr
 #' @importFrom matrixStats rowQuantiles
@@ -32,6 +33,7 @@
 #' @importFrom future plan
 #' @importFrom future multisession
 #' @importFrom furrr future_map
+#' @importFrom furrr furrr_options
 #'
 #' @export
 #'
@@ -59,8 +61,8 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
 
   data <- as_tibble(data)
 
-  boot_reps <- stabiliser:::rep_selector_boot(data = data, boot_reps = boot_reps)
-  permutations <- stabiliser:::rep_selector_perm(data = data, permutations = permutations)
+  boot_reps <- rep_selector_boot(data = data, boot_reps = boot_reps)
+  permutations <- rep_selector_perm(data = data, permutations = permutations)
 
   message("Stabilising across ", boot_reps, "sub-samples. Permuting ", permutations, " times, with ", perm_boot_reps, "sub-samples for each permutation.")
 
@@ -73,7 +75,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
     dplyr::select(-all_of(intercept_level_ids))
 
   ## Must have no missing variables, TO DO make it work with normalistion etc
-  data_prepped <- stabiliser:::prep_data(data = data_for_prep, outcome = outcome, normalise = normalise, dummy = dummy, impute = impute)
+  data_prepped <- prep_data(data = data_for_prep, outcome = outcome, normalise = normalise, dummy = dummy, impute = impute)
 
   data_selected <- level_data %>%
     bind_cols(data_prepped)
