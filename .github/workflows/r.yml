@@ -23,6 +23,7 @@ jobs:
     strategy:
       matrix:
         r-version: ['release']
+        cran-mirror: ['https://cran.r-project.org']
 
     steps:
       - uses: actions/checkout@v3
