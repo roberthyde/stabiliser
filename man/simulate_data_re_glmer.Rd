@@ -15,6 +15,21 @@ simulate_glmer_re_data(
   sigma_u = 1
 )
 }
+\arguments{
+\item{n_subjects}{The number of individual subjects, e.g. participations}
+
+\item{obs_per_subject}{The number of observations per subject}
+
+\item{n_signal}{The  number of causal predictors}
+
+\item{n_noise}{The number of junk predictors}
+
+\item{beta0}{Intercept}
+
+\item{beta_signal}{signal size for causal parameters}
+
+\item{sigma_u}{standard deviation for random intercepts}
+}
 \value{
 A simulated dataset with a clustered outcome suitable for random effects analysis with a binary outcome
 }

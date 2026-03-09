@@ -4,6 +4,13 @@
 #'
 #' @description Simulate a dataset where some variables are associated with the outcome and some are unk
 #'
+#' @param n_subjects The number of individual subjects, e.g. participations
+#' @param obs_per_subject The number of observations per subject
+#' @param n_signal The  number of causal predictors
+#' @param n_noise The number of junk predictors
+#' @param beta0 Intercept
+#' @param beta_signal signal size for causal parameters
+#' @param sigma_u standard deviation for random intercepts
 #'
 #' @return A simulated dataset with a clustered outcome suitable for random effects analysis with a binary outcome
 #'
