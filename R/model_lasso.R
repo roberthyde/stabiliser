@@ -35,7 +35,7 @@ model_lasso <- function(data, outcome, type) {
     select(-all_of(outcome)) %>%
     as.matrix()
 
-  fit_lasso <- cv.glmnet(x = x_temp, y = y_temp, alpha = 1, family = type)
+  fit_lasso <- cv.glmnet(x = x_temp, y = y_temp, alpha = 1, family = type, standardize = FALSE)
 
   coefs <- coef(fit_lasso, s = "lambda.min")
 

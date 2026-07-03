@@ -35,7 +35,7 @@ model_enet <- function(data, outcome, type) {
     select(-all_of(outcome)) %>%
     as.matrix()
 
-  fit_glmnet <- cv.glmnet(x = x_temp, y = y_temp, family = type)
+  fit_glmnet <- cv.glmnet(x = x_temp, y = y_temp, family = type, standarize = FALSE)
 
   coefs <- coef(fit_glmnet, s = "lambda.min")
 
