@@ -65,7 +65,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
   boot_reps <- rep_selector_boot(data = data, boot_reps = boot_reps)
   permutations <- rep_selector_perm(data = data, permutations = permutations)
 
-  message("Stabilising across ", boot_reps, "bootstrap repetitions at a", data_prop,  "sub-sample proportion. Permuting ", permutations, " times, with ", perm_boot_reps, "sub-samples for each permutation.")
+  message("Stabilising across ", boot_reps, " bootstrap repetitions at a", data_prop,  " sub-sample proportion. Permuting ", permutations, " times, with ", perm_boot_reps, "sub-samples for each permutation.")
 
 
   # Prep non level_2 data
@@ -291,9 +291,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
 
   colnames(p_calcs)[1:2] <- c("p1", "p2")
   p_calcs$Pvalue <- apply(p_calcs[1:2], 1, FUN = min)
-
-  print("P old version:")
-  print(p_calcs)
 
 
   percent_counts_in_model_join_4 <- as.data.frame(cbind(CMS_NEW_quant, percent_counts_in_model_join_4, p_calcs$Pvalue))
