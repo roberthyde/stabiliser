@@ -17,6 +17,7 @@
 #' @param base_id level of the random effect to bootstrap by, e.g individual. This is likely the lower level of random effect specified
 #' @param parallel TRUE or FALSE, whether to set up parallel processing
 #' @param num_cores Number of cores to use if parallel processing required
+#' @param data_prop proportion of data to sub-sample, 1 = a full boot-strap sample
 #'
 #'
 #' @return A list containing a table of variable stabilities and a numeric permutation threshold.
@@ -44,7 +45,7 @@ utils::globalVariables(c("models", "in_model", "mean_coefficient", "ci_lower", "
 stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NULL, n_top_filter = 50,
                                boot_reps = "auto", permutations = "auto", perm_boot_reps = 20,
                                normalise = FALSE, dummy = FALSE, impute = FALSE,
-                               parallel = TRUE, cores = 4
+                               parallel = TRUE, cores = 4, data_prop = 1
 ) {
 
   if(parallel== TRUE){
@@ -64,7 +65,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
   boot_reps <- rep_selector_boot(data = data, boot_reps = boot_reps)
   permutations <- rep_selector_perm(data = data, permutations = permutations)
 
-  message("Stabilising across ", boot_reps, "sub-samples. Permuting ", permutations, " times, with ", perm_boot_reps, "sub-samples for each permutation.")
+  message("Stabilising across ", boot_reps, " bootstrap repetitions at a", data_prop,  " sub-sample proportion. Permuting ", permutations, " times, with ", perm_boot_reps, "sub-samples for each permutation.")
 
 
   # Prep non level_2 data
@@ -149,7 +150,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
     group_ids <- map_chr(groups, ~ as.character(.x[[base_id_char]])[1])
 
     # Stability selection based on subsmaplingSample group IDs with replacement
-    boot_ids <- sample(group_ids, size = floor(length(group_ids)*0.8), replace = FALSE)
+    boot_ids <- sample(group_ids, size = floor(length(group_ids)*data_prop), replace = FALSE)
 
     # Map sampled IDs back to their group data and bind
     RE_boot <- boot_ids %>%
@@ -291,9 +292,6 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
   colnames(p_calcs)[1:2] <- c("p1", "p2")
   p_calcs$Pvalue <- apply(p_calcs[1:2], 1, FUN = min)
 
-  print("P old version:")
-  print(p_calcs)
-
 
   percent_counts_in_model_join_4 <- as.data.frame(cbind(CMS_NEW_quant, percent_counts_in_model_join_4, p_calcs$Pvalue))
   colnames(percent_counts_in_model_join_4)[7] <- "percent_in_model"
@@ -378,7 +376,7 @@ stabilise_re_glmer <- function(data, outcome, intercept_level_ids, base_id = NUL
       group_ids <- map_chr(groups, ~ as.character(.x[[base_id_char]])[1])
 
       # Sub-sample group IDs without replacement
-      boot_ids <- sample(group_ids, size = floor(length(group_ids)*0.8), replace = TRUE)
+      boot_ids <- sample(group_ids, size = floor(length(group_ids)*data_prop), replace = FALSE)
 
       # Map sampled IDs back to their group data and bind
       RE_boot <- boot_ids %>%
